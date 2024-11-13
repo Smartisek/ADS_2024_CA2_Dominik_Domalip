@@ -1,79 +1,83 @@
 #pragma once
 #include "BSTNode.h"
-
 #include <vector>
-template <class T>
+using namespace std;
+
+template <class K, class V>
 class BinaryTree
 {
-	void addItemToArray(BSTNode<T>* node, int& pos, T* arr);
+	void addItemToArray(BSTNode<K, V>* node, int& pos,pair<K,V>* arr);
 public:
-	BSTNode<T>* root;
+	BSTNode<K, V>* root;
 	BinaryTree();
-	BinaryTree(const BinaryTree<T>& other);
-	BinaryTree<T> operator=(const BinaryTree<T>& other);
-	void add(T item);
-	bool remove(T& item);
+	BinaryTree(const BinaryTree<K, V>& other);
+	BinaryTree<K, V> operator=(const BinaryTree<K, V>& other);
+	void add(K key, V value);
+	bool remove(K& key);
 	void clear();
 	int count();
-	T& get(T& item);
+	V& get(K& key);
 
 	void printInOrder();
-	void printInOrder(BSTNode<T>* node);
+	void printInOrder(BSTNode<K, V>* node);
 	void printPreOrder();
-	void printPreOrder(BSTNode<T>* node);
+	void printPreOrder(BSTNode<K, V>* node);
 	void printPostOrder();
-	void printPostOrder(BSTNode<T>* node);
-	T* toArray();
+	void printPostOrder(BSTNode<K, V>* node);
+	pair<K, V>* toArray();
 	~BinaryTree();
 };
 
-template <class T>
-BinaryTree<T>::BinaryTree()
+template <class K, class V>
+BinaryTree<K, V>::BinaryTree()
 {
 	root = nullptr;
 }
 
-template <class T>
-BinaryTree<T>::BinaryTree(const BinaryTree<T>& other)
+template <class K, class V>
+BinaryTree<K, V>::BinaryTree(const BinaryTree<K, V>& other)
 {
 	root = nullptr;
 	if (other.root != nullptr)
-		root = new BSTNode<T>(*other.root);
+		root = new BSTNode<K, V>(*other.root);
 }
-template <class T>
-BinaryTree<T> BinaryTree<T>::operator=(const BinaryTree<T>& other)
+
+template <class K, class V>
+BinaryTree<K, V> BinaryTree<K, V>::operator=(const BinaryTree<K, V>& other)
 {
 	if (this == &other)
 		return *this;
 	if (other.root != nullptr)
-		root = new BSTNode<T>(*other.root);
+		root = new BSTNode<K, V>(*other.root);
 	else
 		root = nullptr;
 	return *this;
 
 }
-template <class T>
-void BinaryTree<T>::add(T item)
+
+template <class K, class V>
+void BinaryTree<K, V>::add(K key, V value)
 {
 	if (root == nullptr)
 	{
-		root = new BSTNode<T>(item);
-		root->setItem(item);
+		root = new BSTNode<K, V>(key, value);
 	}
 	else
 	{
-		root->add(item);
+		root->add(key, value);
 	}
 }
-template <class T>
-int BinaryTree<T>::count()
+
+template <class K, class V>
+int BinaryTree<K, V>::count()
 {
 	if (root == nullptr)
 		return 0;
 	return root->count();
 }
-template <class T>
-bool BinaryTree<T>::remove(T& item)
+
+template <class K, class V>
+bool BinaryTree<K, V>::remove(K& key)
 {
 	BSTNode<T>* toBeRemoved = root;
 	BSTNode<T>* parent = nullptr;
@@ -82,7 +86,7 @@ bool BinaryTree<T>::remove(T& item)
 	while (!found && toBeRemoved != nullptr)
 	{
 
-		if (toBeRemoved->getItem() == item)
+		if (toBeRemoved->getKey() == key)
 		{
 
 			found = true;
@@ -90,7 +94,7 @@ bool BinaryTree<T>::remove(T& item)
 		else
 		{
 			parent = toBeRemoved;
-			if (toBeRemoved->getItem() > item)
+			if (toBeRemoved->getKey() > key)
 			{
 				toBeRemoved = toBeRemoved->getLeft();
 			}
@@ -105,7 +109,7 @@ bool BinaryTree<T>::remove(T& item)
 
 	if (toBeRemoved->getLeft() == nullptr || toBeRemoved->getRight() == nullptr)
 	{
-		BSTNode<T>* newChild;
+		BSTNode<K, V>* newChild;
 		if (toBeRemoved->getLeft() == nullptr)
 		{
 			newChild = toBeRemoved->getRight();
@@ -129,14 +133,16 @@ bool BinaryTree<T>::remove(T& item)
 		return true;
 	}
 
-	BSTNode<T>* smallestParent = toBeRemoved;
-	BSTNode<T>* smallest = toBeRemoved->getRight();
+	BSTNode<K, V>* smallestParent = toBeRemoved;
+	BSTNode<K, V>* smallest = toBeRemoved->getRight();
 	while (smallest->getLeft() != nullptr)
 	{
 		smallestParent = smallest;
 		smallest = smallest->getLeft();
 	}
-	toBeRemoved->setItem(smallest->getItem());
+	toBeRemoved->setKey(smallest->getKey());
+	toBeRemoved->setValue(smallest->getValue());
+
 	if (smallestParent == toBeRemoved)
 	{
 		smallestParent->setRight(smallest->getRight());
@@ -146,56 +152,57 @@ bool BinaryTree<T>::remove(T& item)
 		smallestParent->setLeft(smallest->getRight());
 	}
 
+	delete smallest;
+
 }
-template <class T>
-T& BinaryTree<T>::get(T& item)
+template <class K, class V>
+V& BinaryTree<K, V>::get(K& key)
 {
 	bool found = false;
-	BSTNode<T>* current = root;
+	BSTNode<K, V>* current = root;
 	while (!found)
 	{
-
 		if (current == nullptr)
 			break;
-		if (current->getItem() == item)
-			return current->getItem();
-		else if (current->getItem() > item)
+		if (current->getKey() == key)
+			return current->getValue();
+		else if (current->getKey() > key)
 			current = current->getLeft();
 		else
 			current = current->getRight();
 	}
-	throw logic_error("ITem not found");
+	throw logic_error("Item was not found!");
 }
-template <class T>
-void BinaryTree<T>::addItemToArray(BSTNode<T>* node, int& pos, T* arr)
+template <class K, class V>
+void BinaryTree<K, V>::addItemToArray(BSTNode<K, V>* node, int& pos, pair<K, V>* arr)
 {
 	if (node != nullptr)
 	{
 		addItemToArray(node->getLeft(), pos, arr);
-		arr[pos] = node->getItem();
+		arr[pos] = make_pair(node->getKey(), node->getValue());
 		pos++;
 		addItemToArray(node->getRight(), pos, arr);
 	}
 
 }
 
-template <class T>
-T* BinaryTree<T>::toArray()
+template <class K, class V>
+pair<K, V>* BinaryTree<K, V>::toArray()
 {
-	T* arr = new T[root->count()];
+	pair<K, V>* arr = new pair<K, V>[root->count()];
 	int pos = 0;
 	addItemToArray(root, pos, arr);
 	return arr;
 }
 
-template <class T>
-void BinaryTree<T>::clear()
+template <class K, class V>
+void BinaryTree<K, V>::clear()
 {
 	delete root;
 	root = nullptr;
 }
-template <class T>
-BinaryTree<T>::~BinaryTree()
+template <class K, class V>
+BinaryTree<K, V>::~BinaryTree()
 {
 	if (root != nullptr)
 	{
@@ -204,53 +211,56 @@ BinaryTree<T>::~BinaryTree()
 	}
 }
 
-template<class T>
-void BinaryTree<T>::printInOrder()
+template <class K, class V>
+void BinaryTree<K, V>::printInOrder()
 {
 	this->printInOrder(root);
 	cout << endl;
 }
-template<class T>
-void BinaryTree<T>::printInOrder(BSTNode<T>* node)
+
+template <class K, class V>
+void BinaryTree<K,V>::printInOrder(BSTNode<K,V>* node)
 {
 	
 	if (node != nullptr) { // base case for the recursive function
 		printInOrder(node->getLeft()); //call the recursive funtion for the left child of current node 
-		cout << node->getItem() << " "; //print the value of the current node 
+		cout << node->getKey() << ": " << node->getValue() << " "; //print the value of the current node 
 		printInOrder(node->getRight()); // call the recursive funtion for the right child of current node
 	}
 	// first visit left subtree, then print the current node and then visit right subtree
 }
 
-template<class T>
-void BinaryTree<T>::printPreOrder()
+template <class K, class V>
+void BinaryTree<K, V>::printPreOrder()
 {
 	this->printPreOrder(root);
 	cout << endl;
 }
-template<class T>
-void BinaryTree<T>::printPreOrder(BSTNode<T>* node)
+
+template <class K, class V>
+void BinaryTree<K, V>::printPreOrder(BSTNode<K, V>* node)
 {
 	if (node != nullptr) {
-		cout << node->getItem() << " "; //print the value of the current node
+		cout << node->getKey() << ": " << node->getValue() << " "; //print the value of the current node
 		printPreOrder(node->getLeft()); //call the recursive funtion for the left child of current node
 		printPreOrder(node->getRight()); // call the recursive funtion for the right child of current node
 	}
 	// first print the current node , then visit left subtree and then right subtree
 }
 
-template<class T>
-void BinaryTree<T>::printPostOrder()
+template <class K, class V>
+void BinaryTree<K, V>::printPostOrder()
 {
 	this->printPostOrder(root);
 	cout << endl;
 }
-template<class T>
-void BinaryTree<T>::printPostOrder(BSTNode<T>* node)
+
+template <class K, class V>
+void BinaryTree<K, V>::printPostOrder(BSTNode<K, V>* node)
 {
 	if (node != nullptr) {
 		printPostOrder(node->getLeft()); //call the recursive funtion for the left child of current node
 		printPostOrder(node->getRight()); // call the recursive funtion for the right child of current node
-		cout << node->getItem() << " "; //print the value of the current node
+		cout << node->getKey() << ": " << node->getValue() << " "; //print the value of the current node
 	}
 }
