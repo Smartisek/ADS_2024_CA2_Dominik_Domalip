@@ -15,10 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Binary TreeMap Testing.cpp">
+    <ClCompile Include="Testing Tree Map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Testing BSTNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

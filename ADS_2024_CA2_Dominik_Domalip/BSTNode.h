@@ -7,9 +7,9 @@ template <class K, class V>
 class BSTNode
 {
 	/*Pointers*/
-	BSTNode<T>* parent;
-	BSTNode<T>* left;
-	BSTNode<T>* right;
+	BSTNode<K, V>* parent;
+	BSTNode<K, V>* left;
+	BSTNode<K, V>* right;
 	/*Data inside node*/
 	K key;
 	V value;
