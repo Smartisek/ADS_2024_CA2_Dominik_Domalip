@@ -64,6 +64,12 @@ public:
 		Assert::AreEqual(left->getRight()->getKey().c_str(), "I");
 	}
 
-
+	TEST_METHOD(CountFunctionTest) {
+		BSTNode<string, int> node("K", 5);
+		node.add("F", 3);
+		node.add("A", 2);
+		node.add("I", 1);
+		Assert::AreEqual(node.count(), 4);
+	}
 	};
 }
