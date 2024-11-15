@@ -34,6 +34,7 @@ public:
 	/*Functions*/ 
 	int count();
 	void add(K key, V value);
+	void clear();
 	/*Destructor*/
 	~BSTNode();
 
@@ -207,6 +208,21 @@ void BSTNode<K, V>::add(K key, V value)
 		{
 			right->add(key, value);
 		}
+	}
+}
+
+template<class K, class V>
+void BSTNode<K, V>::clear()
+{
+	if (left != nullptr) {
+		left->clear();
+		delete left;
+		left = nullptr;
+	}
+	if (right != nullptr) {
+		right->clear();
+		delete right;
+		right = nullptr;
 	}
 }
 

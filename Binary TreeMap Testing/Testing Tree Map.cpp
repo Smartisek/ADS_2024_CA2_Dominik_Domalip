@@ -30,11 +30,6 @@ public:
 		BSTNode<string, int>* left = tree.root->getLeft();
 		Assert::IsNotNull(left);
 		Assert::AreEqual(left->getKey().c_str(), "A");
-
-	/*	Assert::AreEqual(tree.root->getKey().c_str(), "B");
-		BSTNode<string, int>* left = tree.root->getLeft();
-		Assert::IsNotNull(left);
-		Assert::AreEqual(left->getKey().c_str(), "A");*/
 	}
 
 	TEST_METHOD(AddToRootRight) {
@@ -68,6 +63,16 @@ public:
 		tree.add("C", 3);
 		string key = "A";
 		Assert::AreEqual(tree.get(key), 1);
+	}
+
+	TEST_METHOD(ClearTreeTest) {
+		BinaryTree<string, int> tree;
+		tree.add("A", 1);
+		tree.add("B", 2);
+		tree.add("C", 3);
+		tree.clear();
+		Assert::IsNull(tree.root);
+		Assert::AreEqual(tree.count(), 0);
 	}
 	};
 }

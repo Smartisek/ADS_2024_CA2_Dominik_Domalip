@@ -12,7 +12,7 @@ void testAdd() {
 
     // Print the tree structure
     tree.printInOrder();
-	tree.clear();
+
 
     // Assertions (replace with your test framework's assertion methods)
     int key = 10;
