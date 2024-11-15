@@ -235,7 +235,11 @@ void BinaryTree<K, V>::clear(BSTNode<K, V>* node) //private helper function for 
 template <class K, class V>
 BinaryTree<K, V>::~BinaryTree() //Destructor Function for memory management
 {
-	clear(); //call the clear function to delete all nodes and set root to null
+	if (root != nullptr)
+	{
+		delete root;
+		root = nullptr;
+	}
 }
 
 template <class K, class V>

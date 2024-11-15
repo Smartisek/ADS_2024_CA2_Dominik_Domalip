@@ -2,7 +2,7 @@
 #include "CppUnitTest.h"
 #include "../ADS_2024_CA2_Dominik_Domalip/BinaryTree.h"
 
-using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+using namespace Microsoft::VisualStudio::CppUnitTestFramework; 
 
 namespace BinaryTreeMapTesting
 {
@@ -30,6 +30,11 @@ public:
 		BSTNode<string, int>* left = tree.root->getLeft();
 		Assert::IsNotNull(left);
 		Assert::AreEqual(left->getKey().c_str(), "A");
+
+	/*	Assert::AreEqual(tree.root->getKey().c_str(), "B");
+		BSTNode<string, int>* left = tree.root->getLeft();
+		Assert::IsNotNull(left);
+		Assert::AreEqual(left->getKey().c_str(), "A");*/
 	}
 
 	TEST_METHOD(AddToRootRight) {
@@ -54,6 +59,15 @@ public:
 		tree.add("B", 2);
 		tree.add("C", 3);
 		Assert::AreEqual(tree.count(), 3);
+	}
+
+	TEST_METHOD(GetAValueOfKeyTest) {
+		BinaryTree<string, int> tree;
+		tree.add("A", 1);
+		tree.add("B", 2);
+		tree.add("C", 3);
+		string key = "A";
+		Assert::AreEqual(tree.get(key), 1);
 	}
 	};
 }
