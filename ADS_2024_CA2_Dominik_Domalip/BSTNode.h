@@ -83,17 +83,18 @@ BSTNode<K, V>* BSTNode<K, V>::operator=(const BSTNode<K, V>& other)
 template <class K, class V>
 BSTNode<K, V>::~BSTNode()
 {
-	//checks if both sides and if they are not null it will recursively delete the left and right side and set the sides pointers to null
-	if (left != nullptr)
-	{
-		delete left;
-		left = nullptr;
-	}
-	if (right != nullptr)
-	{
-		delete right;
-		right = nullptr;
-	}
+	////checks if both sides and if they are not null it will recursively delete the left and right side and set the sides pointers to null
+	//if (left != nullptr)
+	//{
+	//	delete left;
+	//	left = nullptr;
+	//}
+	//if (right != nullptr)
+	//{
+	//	delete right;
+	//	right = nullptr;
+	//}
+	clear(); //clear function is called to delete the entire tree
 
 }
 
@@ -214,12 +215,12 @@ void BSTNode<K, V>::add(K key, V value)
 template<class K, class V>
 void BSTNode<K, V>::clear()
 {
-	if (left != nullptr) {
+	if (left != nullptr) { //if left is not null then recursively call clear on the left child and delete the left child
 		left->clear();
 		delete left;
 		left = nullptr;
 	}
-	if (right != nullptr) {
+	if (right != nullptr) { //if right is not null then recursively call clear on the right child and delete the right child
 		right->clear();
 		delete right;
 		right = nullptr;

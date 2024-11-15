@@ -217,10 +217,10 @@ pair<K, V>* BinaryTree<K, V>::toArray()
 template <class K, class V>
 void BinaryTree<K, V>::clear() //public clear function using private helper function
 {
-	if (root != nullptr) {
-		root->clear();
-		delete root;
-		root = nullptr;
+	if (root != nullptr) { //if tree not empty
+		root->clear(); //call the clear function from BSTNode onto root
+		delete root; 
+		root = nullptr; 
 	}
 }
 
@@ -229,11 +229,7 @@ void BinaryTree<K, V>::clear() //public clear function using private helper func
 template <class K, class V>
 BinaryTree<K, V>::~BinaryTree() //Destructor Function for memory management
 {
-	if (root != nullptr)
-	{
-		delete root;
-		root = nullptr;
-	}
+	clear(); //call the clear function to delete all nodes in the tree, clear handles all the memory alredy no need for redundancy
 }
 
 template <class K, class V>
