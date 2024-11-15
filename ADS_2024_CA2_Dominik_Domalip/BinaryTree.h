@@ -36,45 +36,46 @@ BinaryTree<K, V>::BinaryTree()
 }
 
 template <class K, class V>
-BinaryTree<K, V>::BinaryTree(const BinaryTree<K, V>& other)
+BinaryTree<K, V>::BinaryTree(const BinaryTree<K, V>& other) //copy constructor
 {
-	root = nullptr;
-	if (other.root != nullptr)
-		root = new BSTNode<K, V>(*other.root);
+	root = nullptr; //initialize the root to null
+	if (other.root != nullptr) //if other tree root is not null  
+		root = new BSTNode<K, V>(*other.root); //create a new node copying the root of the other tree
 }
 
 template <class K, class V>
-BinaryTree<K, V> BinaryTree<K, V>::operator=(const BinaryTree<K, V>& other)
+BinaryTree<K, V> BinaryTree<K, V>::operator=(const BinaryTree<K, V>& other) //assign one binary tree to another
 {
-	if (this == &other)
-		return *this;
-	if (other.root != nullptr)
-		root = new BSTNode<K, V>(*other.root);
-	else
-		root = nullptr;
-	return *this;
+	if (this == &other) //check if the current object is the same as the one trying to be assigned (check by memory address)
+		return *this; //return the current object if it is
+
+	if (other.root != nullptr) // if the other tree root is not null
+		root = new BSTNode<K, V>(*other.root); // create a new node copying others tree rot node by copy constructor
+	else //if the other tree root is null
+		root = nullptr; //set the root to null
+	return *this; //return the current object
 
 }
 
 template <class K, class V>
 void BinaryTree<K, V>::add(K key, V value)
 {
-	if (root == nullptr)
+	if (root == nullptr) //if root is empty just create a new node
 	{
 		root = new BSTNode<K, V>(key, value);
 	}
-	else
+	else //if root is not empty
 	{
-		root->add(key, value);
+		root->add(key, value); //call BSTNode add function onto the root which will correctly set new node in the tree
 	}
 }
 
 template <class K, class V>
 int BinaryTree<K, V>::count()
 {
-	if (root == nullptr)
+	if (root == nullptr) //if root is empty return 0
 		return 0;
-	return root->count();
+	return root->count(); //call count from BSTNode 
 }
 
 template <class K, class V>
@@ -173,30 +174,34 @@ bool BinaryTree<K, V>::remove(K& key)
 template <class K, class V>
 V& BinaryTree<K, V>::get(K& key)
 {
-	bool found = false;
-	BSTNode<K, V>* current = root;
-	while (!found)
+	BSTNode<K, V>* current = root; //create a pointer node starting from the roor 
+
+	while (current != nullptr) //until found do below 
 	{
-		if (current == nullptr)
+		if (current == nullptr) //stop the while, means tree is empty
 			break;
-		if (current->getKey() == key)
+
+		if (current->getKey() == key) //if root is the key looking for then return the value 
 			return current->getValue();
-		else if (current->getKey() > key)
-			current = current->getLeft();
-		else
-			current = current->getRight();
+
+		else if (current->getKey() > key) //if the root is more than the key 
+			current = current->getLeft(); //go left and find the key
+		else //if the root is less than the key
+			current = current->getRight(); //go right and find the key
 	}
 	throw logic_error("Item was not found!");
 }
+
 template <class K, class V>
-void BinaryTree<K, V>::addItemToArray(BSTNode<K, V>* node, int& pos, pair<K, V>* arr)
+void BinaryTree<K, V>::addItemToArray(BSTNode<K, V>* node, int& pos, pair<K, V>* arr) //help function for toArray
 {
-	if (node != nullptr)
+	//This will add pair into array inorder traversal of the tree in sorted order
+	if (node != nullptr) //base case for recurison 
 	{
-		addItemToArray(node->getLeft(), pos, arr);
-		arr[pos] = make_pair(node->getKey(), node->getValue());
-		pos++;
-		addItemToArray(node->getRight(), pos, arr);
+		addItemToArray(node->getLeft(), pos, arr); //recursively call itself on the left child of current node at position into arr
+		arr[pos] = make_pair(node->getKey(), node->getValue()); //add both key and value to array at posiotin pos
+		pos++; //go next position
+		addItemToArray(node->getRight(), pos, arr); //recursively call itself on the right child of current node at position into arr
 	}
 
 }
@@ -204,10 +209,10 @@ void BinaryTree<K, V>::addItemToArray(BSTNode<K, V>* node, int& pos, pair<K, V>*
 template <class K, class V>
 pair<K, V>* BinaryTree<K, V>::toArray()
 {
-	pair<K, V>* arr = new pair<K, V>[root->count()];
-	int pos = 0;
-	addItemToArray(root, pos, arr);
-	return arr;
+	pair<K, V>* arr = new pair<K, V>[root->count()]; //create a new array of type pair<K, V> with size of count funcion
+	int pos = 0; //start from 0
+	addItemToArray(root, pos, arr); //call the helper function to add items to array
+	return arr; //return the array
 }
 
 template <class K, class V>
