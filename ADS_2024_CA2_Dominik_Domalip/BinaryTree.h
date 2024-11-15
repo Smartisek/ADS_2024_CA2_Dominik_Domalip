@@ -7,6 +7,7 @@ template <class K, class V>
 class BinaryTree
 {
 	void addItemToArray(BSTNode<K, V>* node, int& pos,pair<K,V>* arr);
+	void clear(BSTNode<K, V>* node); //private helper function that will do the logic and will be caller by clear below
 public:
 	BSTNode<K, V>* root;
 	BinaryTree();
@@ -196,11 +197,22 @@ pair<K, V>* BinaryTree<K, V>::toArray()
 }
 
 template <class K, class V>
-void BinaryTree<K, V>::clear()
+void BinaryTree<K, V>::clear() //public clear function using private helper function
 {
-	delete root;
-	root = nullptr;
+	clear(root); //call function with the clear logic
+	root = nullptr; //set the root to null after clearing
 }
+
+template<class K, class V>
+void BinaryTree<K, V>::clear(BSTNode<K, V>* node) //private helper function for logic delete
+{
+	if (node != nullptr) { //base case, when node is not empty
+		clear(node->getLeft()); //call the recursive function for the left child of current node
+		clear(node->getRight()); //call the recursive function for the right child of current node
+		delete node; //finaly delete current node 
+	}
+}
+
 template <class K, class V>
 BinaryTree<K, V>::~BinaryTree()
 {
