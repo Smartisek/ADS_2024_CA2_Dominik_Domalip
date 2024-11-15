@@ -7,6 +7,7 @@ template <class K, class V>
 class BinaryTree
 {
 	void addItemToArray(BSTNode<K, V>* node, int& pos,pair<K,V>* arr);
+	void clear(BSTNode<K, V>* node); //private helper function that will do the logic and will be caller by clear below
 public:
 	BSTNode<K, V>* root;
 	BinaryTree();
@@ -35,153 +36,172 @@ BinaryTree<K, V>::BinaryTree()
 }
 
 template <class K, class V>
-BinaryTree<K, V>::BinaryTree(const BinaryTree<K, V>& other)
+BinaryTree<K, V>::BinaryTree(const BinaryTree<K, V>& other) //copy constructor
 {
-	root = nullptr;
-	if (other.root != nullptr)
-		root = new BSTNode<K, V>(*other.root);
+	root = nullptr; //initialize the root to null
+	if (other.root != nullptr) //if other tree root is not null  
+		root = new BSTNode<K, V>(*other.root); //create a new node copying the root of the other tree
 }
 
 template <class K, class V>
-BinaryTree<K, V> BinaryTree<K, V>::operator=(const BinaryTree<K, V>& other)
+BinaryTree<K, V> BinaryTree<K, V>::operator=(const BinaryTree<K, V>& other) //assign one binary tree to another
 {
-	if (this == &other)
-		return *this;
-	if (other.root != nullptr)
-		root = new BSTNode<K, V>(*other.root);
-	else
-		root = nullptr;
-	return *this;
+	if (this == &other) //check if the current object is the same as the one trying to be assigned (check by memory address)
+		return *this; //return the current object if it is
+
+	if (other.root != nullptr) // if the other tree root is not null
+		root = new BSTNode<K, V>(*other.root); // create a new node copying others tree rot node by copy constructor
+	else //if the other tree root is null
+		root = nullptr; //set the root to null
+	return *this; //return the current object
 
 }
 
 template <class K, class V>
 void BinaryTree<K, V>::add(K key, V value)
 {
-	if (root == nullptr)
+	if (root == nullptr) //if root is empty just create a new node
 	{
 		root = new BSTNode<K, V>(key, value);
 	}
-	else
+	else //if root is not empty
 	{
-		root->add(key, value);
+		root->add(key, value); //call BSTNode add function onto the root which will correctly set new node in the tree
 	}
 }
 
 template <class K, class V>
 int BinaryTree<K, V>::count()
 {
-	if (root == nullptr)
+	if (root == nullptr) //if root is empty return 0
 		return 0;
-	return root->count();
+	return root->count(); //call count from BSTNode 
 }
 
 template <class K, class V>
 bool BinaryTree<K, V>::remove(K& key)
 {
-	BSTNode<T>* toBeRemoved = root;
-	BSTNode<T>* parent = nullptr;
-	bool found = false;
+	/******Visualisation for this alghorithm: https://www.youtube.com/watch?v=DkOswl0k7s4 ******/
+	/*Help Variables*/
+	BSTNode<K, V>* toBeRemoved = root; //points to the node needed to remove
+	BSTNode<K, V>* parent = nullptr; //will point to the parent of toBeRemoved, keeps track when traversing tree
+	bool found = false; //check if we found needed node
 
-	while (!found && toBeRemoved != nullptr)
+	while (!found && toBeRemoved != nullptr) //when node is not yet found and root is not empty
 	{
 
-		if (toBeRemoved->getKey() == key)
+		if (toBeRemoved->getKey() == key) //check for when the key is actually the first node which is root 
 		{
 
-			found = true;
+			found = true; //was found
 		}
 		else
 		{
-			parent = toBeRemoved;
-			if (toBeRemoved->getKey() > key)
+			parent = toBeRemoved; //set the parent to the current node
+			if (toBeRemoved->getKey() > key) //check if the current node's key is more than what we are looking for
 			{
-				toBeRemoved = toBeRemoved->getLeft();
+				toBeRemoved = toBeRemoved->getLeft(); //when yes, move to the left child and parent is the previous node
 			}
 			else
 			{
-				toBeRemoved = toBeRemoved->getRight();
+				toBeRemoved = toBeRemoved->getRight(); //when key is less than the current node, move to the right child
 			}
 		}
-	}
+	} //exits while loop when we found node we are loking for
+
+	//node is not present in this tree
 	if (!found)
 		return false;
 
-	if (toBeRemoved->getLeft() == nullptr || toBeRemoved->getRight() == nullptr)
+	/***Remove when node has max one child***/
+	if (toBeRemoved->getLeft() == nullptr || toBeRemoved->getRight() == nullptr) //check if node has max one child
 	{
-		BSTNode<K, V>* newChild;
-		if (toBeRemoved->getLeft() == nullptr)
+		/*Deciding on newChild*/
+		BSTNode<K, V>* newChild; //new pointer will point to the child of the node to be removed
+		if (toBeRemoved->getLeft() == nullptr) //if the node to be removed does not have left kid
 		{
-			newChild = toBeRemoved->getRight();
+			newChild = toBeRemoved->getRight(); //set the new child to right child
 		}
-		else
+		else //node to be removed does not have right child
 		{
-			newChild = toBeRemoved->getLeft();
+			newChild = toBeRemoved->getLeft(); //set the new child to left child
 		}
-		if (parent == nullptr)
+
+		/*Giving a newChild to a parent instead of toBeRemoved node*/
+		if (parent == nullptr) //when node to be removed is the root 
 		{
-			root = newChild;
+			root = newChild; //update the root to be the new child 
 		}
-		else if (parent->getLeft() == toBeRemoved)
+		else if (parent->getLeft() == toBeRemoved) //when parents left child is what we are looking for
 		{
-			parent->setLeft(newChild);
+			parent->setLeft(newChild); //change the left child from toBeRemoved to newChild 
 		}
-		else
+		else //parents right child is the node needed to be removed 
 		{
-			parent->setRight(newChild);
+			parent->setRight(newChild); //set the right child to be the new child
 		}
-		return true;
+		delete toBeRemoved; //free the memory when not needed anymore
+		return true; //return true when node was removed
 	}
 
-	BSTNode<K, V>* smallestParent = toBeRemoved;
-	BSTNode<K, V>* smallest = toBeRemoved->getRight();
+	/*Logic for removing node with TWO CHILDREN*/
+	/*Another way could be to find the biggest node in left subtree*/
+	BSTNode<K, V>* smallestParent = toBeRemoved; //will keep track of the parent of the smallest node
+	BSTNode<K, V>* smallest = toBeRemoved->getRight(); //starts as right child of node to be removed
+	//find the smallest node in the right subtree
 	while (smallest->getLeft() != nullptr)
 	{
-		smallestParent = smallest;
-		smallest = smallest->getLeft();
+		smallestParent = smallest; //set the parent of the smallest node to be the current smallest node
+		smallest = smallest->getLeft();//found the smallest node in the right subtree
 	}
-	toBeRemoved->setKey(smallest->getKey());
-	toBeRemoved->setValue(smallest->getValue());
+	toBeRemoved->setKey(smallest->getKey()); //change toBeRemoved node key to be the smallest one in right subtree
+	toBeRemoved->setValue(smallest->getValue());  //change toBeRemoved node value to be the smallest one in right subtree
 
-	if (smallestParent == toBeRemoved)
+	if (smallestParent == toBeRemoved) //when smallestParent is same node as to be removed
 	{
-		smallestParent->setRight(smallest->getRight());
+		smallestParent->setRight(smallest->getRight()); //right child of smallest parent is now the right child of smallest
 	}
-	else
+	else //when smallestParent is not the same as toBeRemoved
 	{
-		smallestParent->setLeft(smallest->getRight());
+		smallestParent->setLeft(smallest->getRight()); //left child of smallest parent is now the right child of smallest
 	}
 
-	delete smallest;
+	delete smallest; //delete the smallest node
+	return true; //return true when node was removed
 
 }
+
 template <class K, class V>
 V& BinaryTree<K, V>::get(K& key)
 {
-	bool found = false;
-	BSTNode<K, V>* current = root;
-	while (!found)
+	BSTNode<K, V>* current = root; //create a pointer node starting from the roor 
+
+	while (current != nullptr) //until found do below 
 	{
-		if (current == nullptr)
+		if (current == nullptr) //stop the while, means tree is empty
 			break;
-		if (current->getKey() == key)
+
+		if (current->getKey() == key) //if root is the key looking for then return the value 
 			return current->getValue();
-		else if (current->getKey() > key)
-			current = current->getLeft();
-		else
-			current = current->getRight();
+
+		else if (current->getKey() > key) //if the root is more than the key 
+			current = current->getLeft(); //go left and find the key
+		else //if the root is less than the key
+			current = current->getRight(); //go right and find the key
 	}
 	throw logic_error("Item was not found!");
 }
+
 template <class K, class V>
-void BinaryTree<K, V>::addItemToArray(BSTNode<K, V>* node, int& pos, pair<K, V>* arr)
+void BinaryTree<K, V>::addItemToArray(BSTNode<K, V>* node, int& pos, pair<K, V>* arr) //help function for toArray
 {
-	if (node != nullptr)
+	//This will add pair into array inorder traversal of the tree in sorted order
+	if (node != nullptr) //base case for recurison 
 	{
-		addItemToArray(node->getLeft(), pos, arr);
-		arr[pos] = make_pair(node->getKey(), node->getValue());
-		pos++;
-		addItemToArray(node->getRight(), pos, arr);
+		addItemToArray(node->getLeft(), pos, arr); //recursively call itself on the left child of current node at position into arr
+		arr[pos] = make_pair(node->getKey(), node->getValue()); //add both key and value to array at posiotin pos
+		pos++; //go next position
+		addItemToArray(node->getRight(), pos, arr); //recursively call itself on the right child of current node at position into arr
 	}
 
 }
@@ -189,26 +209,33 @@ void BinaryTree<K, V>::addItemToArray(BSTNode<K, V>* node, int& pos, pair<K, V>*
 template <class K, class V>
 pair<K, V>* BinaryTree<K, V>::toArray()
 {
-	pair<K, V>* arr = new pair<K, V>[root->count()];
-	int pos = 0;
-	addItemToArray(root, pos, arr);
-	return arr;
+	pair<K, V>* arr = new pair<K, V>[root->count()]; //create a new array of type pair<K, V> with size of count funcion
+	int pos = 0; //start from 0
+	addItemToArray(root, pos, arr); //call the helper function to add items to array
+	return arr; //return the array
 }
 
 template <class K, class V>
-void BinaryTree<K, V>::clear()
+void BinaryTree<K, V>::clear() //public clear function using private helper function
 {
-	delete root;
-	root = nullptr;
+	clear(root); //call function with the clear logic
+	root = nullptr; //set the root to null after clearing
 }
-template <class K, class V>
-BinaryTree<K, V>::~BinaryTree()
+
+template<class K, class V>
+void BinaryTree<K, V>::clear(BSTNode<K, V>* node) //private helper function for logic delete
 {
-	if (root != nullptr)
-	{
-		delete root;
-		root = nullptr;
+	if (node != nullptr) { //base case, when node is not empty
+		clear(node->getLeft()); //call the recursive function for the left child of current node
+		clear(node->getRight()); //call the recursive function for the right child of current node
+		delete node; //finaly delete current node 
 	}
+}
+
+template <class K, class V>
+BinaryTree<K, V>::~BinaryTree() //Destructor Function for memory management
+{
+	clear(); //call the clear function to delete all nodes and set root to null
 }
 
 template <class K, class V>
