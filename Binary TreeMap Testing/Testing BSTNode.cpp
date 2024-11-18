@@ -71,5 +71,46 @@ public:
 		node.add("I", 1);
 		Assert::AreEqual(node.count(), 4);
 	}
+
+	TEST_METHOD(AssignOperatorTest) {
+            BSTNode<string, int> node("K", 5);
+            node.add("H", 26);
+            node.add("N", 6);
+
+            BSTNode<string, int> assignToNode;
+            assignToNode = node;
+
+            //check root
+            Assert::AreEqual(assignToNode.getKey().c_str(), "K");
+            Assert::AreEqual(assignToNode.getValue(), 5);
+
+            //check left
+            Assert::AreEqual(assignToNode.getLeft()->getKey().c_str(), "H");
+            Assert::AreEqual(assignToNode.getLeft()->getValue(), 26);
+
+            //check right
+            Assert::AreEqual(assignToNode.getRight()->getKey().c_str(), "N");
+            Assert::AreEqual(assignToNode.getRight()->getValue(), 6);
+        }
+
+	TEST_METHOD(CopyConstructorTest) {
+		BSTNode<string, int> node("K", 5);
+		node.add("H", 26);
+		node.add("N", 6);
+
+		BSTNode<string, int> copyNode(node);
+
+		//check root
+		Assert::AreEqual(copyNode.getKey().c_str(), "K");
+		Assert::AreEqual(copyNode.getValue(), 5);
+
+		//check left
+		Assert::AreEqual(copyNode.getLeft()->getKey().c_str(), "H");
+		Assert::AreEqual(copyNode.getLeft()->getValue(), 26);
+
+		//check right
+		Assert::AreEqual(copyNode.getRight()->getKey().c_str(), "N");
+		Assert::AreEqual(copyNode.getRight()->getValue(), 6);
+	}
 	};
 }

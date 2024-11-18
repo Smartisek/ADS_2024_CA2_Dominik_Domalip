@@ -18,7 +18,7 @@ public:
 	/*Constructors*/
 	BSTNode();
 	BSTNode(const BSTNode<K, V>& other); //copy constructor
-	BSTNode<K, V>* operator=(const BSTNode<K, V>& other);
+	BSTNode<K, V>& operator=(const BSTNode<K, V>& other);
 	BSTNode(K key, V value);
 	/*Setters*/
 	void setKey(K key);
@@ -43,26 +43,34 @@ public:
 template <class K, class V>
 BSTNode<K, V>::BSTNode(const BSTNode<K, V>& other) //copy constructor making a deeep copy copy with subtrees
 {
+	parent = nullptr; //parent is set to null as the new node is not connected to any tree yet
 	left = right = nullptr; //new node starts with null pointers 
 
-	if (other.left != nullptr) //check if other have left child 
-	//if yes then create a new node copying the left child, this will be done recursively until the are no left chidlren 
-		this->left = new BSTNode<K,V>(*other.left); 
-	if (other.right != nullptr) //check if there are any right chidlren 
-		//if yes then create a new node copying the right child, this will be done recursively until there are no right children
-		this->right = new BSTNode<K,V>(*other.right);
+	//get the key and value from other node to current node 
+	key = other.key; 
+	value = other.value;
 
+	if (other.left != nullptr) { //check if other have left child 
+		//if yes then create a new node copying the left child, this will be done recursively until the are no left chidlren 
+		this->left = new BSTNode<K, V>(*other.left);
+		this->left->parent = this; //set parent of the new node to be current node 
+	}
+
+	if (other.right != nullptr){ //check if there are any right chidlren 
+		//if yes then create a new node copying the right child, this will be done recursively until there are no right children
+		this->right = new BSTNode<K, V>(*other.right);
+		this->right->parent = this; //set parent of the new node to be current node
+		}
 }
 
 template <class K, class V>
-BSTNode<K, V>* BSTNode<K, V>::operator=(const BSTNode<K, V>& other)
+BSTNode<K, V>& BSTNode<K, V>::operator=(const BSTNode<K, V>& other)
 {
 	if (this == &other) //check if the current object is the same as the one trying to be assigned 
 		return *this; //return the current object if it is 
 
-	//delete pointers left and right so the current node does not hold any reference to the old subtrees
-	delete left;
-	delete right;
+	//delete the current tree to make space for the new one
+	clear();
 
 	//get the key and value from other node to be current node KV
 	this->key = other.key;
@@ -72,28 +80,25 @@ BSTNode<K, V>* BSTNode<K, V>::operator=(const BSTNode<K, V>& other)
 	left = right = nullptr;
 
 	//if the left side has a child create a new node and copy the left child by copy constructor which will recursively copy the entire left side
-	if (other.left != nullptr)
+	if (other.left != nullptr) {
 		this->left = new BSTNode<K, V>(*other.left);
+		this->left->parent = this;
+	}
+		
 	//if the right side has a child create a new node and copy the right child by copy constructor which will recursively copy the entire right side
-	if (other.right != nullptr)
+	if (other.right != nullptr) {
 		this->right = new BSTNode<K, V>(*other.right);
+		this->right->parent = this;
+	}
+		
 
+	return *this; //return the current object
 }
 
 template <class K, class V>
 BSTNode<K, V>::~BSTNode()
 {
-	////checks if both sides and if they are not null it will recursively delete the left and right side and set the sides pointers to null
-	//if (left != nullptr)
-	//{
-	//	delete left;
-	//	left = nullptr;
-	//}
-	//if (right != nullptr)
-	//{
-	//	delete right;
-	//	right = nullptr;
-	//}
+	
 	clear(); //clear function is called to delete the entire tree
 
 }
