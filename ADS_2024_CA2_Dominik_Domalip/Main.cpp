@@ -29,7 +29,26 @@ void testAdd() {
     std::cout << "All add tests passed!" << std::endl;
 }
 
+void testOperator() {
+ {
+        BSTNode<std::string, int> node1("A", 1);
+        node1.add("B", 2);
+        node1.add("C", 3);
+
+        BSTNode<std::string, int> node2;
+        node2 = node1;
+
+        assert(node2.getKey() == "A");
+        assert(node2.getValue() == 1);
+        assert(node2.getLeft()->getKey() == "B");
+        assert(node2.getLeft()->getValue() == 2);
+        assert(node2.getRight()->getKey() == "C");
+        assert(node2.getRight()->getValue() == 3);
+    }
+}
+
 int main() {
-    testAdd();
+    testOperator();
+    cout << "tests passed" << endl;
     return 0;
 }
