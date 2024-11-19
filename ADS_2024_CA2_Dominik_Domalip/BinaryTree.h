@@ -143,7 +143,6 @@ bool BinaryTree<T>::remove(T& item)
 		{
 			parent->setRight(newChild); //set the right child to be the new child
 		}
-		delete toBeRemoved; //free the memory when not needed anymore
 		return true; //return true when node was removed
 	}
 
@@ -158,7 +157,7 @@ bool BinaryTree<T>::remove(T& item)
 		smallest = smallest->getLeft();//found the smallest node in the right subtree
 	}
 	toBeRemoved->getItem().setKey(smallest->getItem().getKey()); //change toBeRemoved node key to be the smallest one in right subtree
-	toBeRemoved->getItem.setValue(smallest->getItem().getValue());  //change toBeRemoved node value to be the smallest one in right subtree
+	toBeRemoved->getItem().setValue(smallest->getItem().getValue());  //change toBeRemoved node value to be the smallest one in right subtree
 
 	if (smallestParent == toBeRemoved) //when smallestParent is same node as to be removed
 	{
@@ -221,8 +220,11 @@ pair<typename T::key_type, typename T::value_type>* BinaryTree<T>::toArray()
 template <class T>
 void BinaryTree<T>::clear() //public clear function using private helper function
 {
-	delete root;
-	root = nullptr;
+	if (root != nullptr) {
+		root->clear(); //call the clear function from BSTNode
+		delete root;
+		root = nullptr;
+	}
 }
 
 

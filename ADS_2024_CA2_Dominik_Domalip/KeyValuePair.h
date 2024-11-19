@@ -13,7 +13,7 @@ public:
 	using value_type = V;
 
 	//Constructors
-	KeyValuePair() : key(""), value(0) {} //default constructor empty
+	KeyValuePair() : key(), value() {} //default constructor empty
 	KeyValuePair(K k, V v) : key(k), value(v) {} //constructor with parameters
 
 	//Getters
