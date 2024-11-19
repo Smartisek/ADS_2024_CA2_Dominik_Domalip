@@ -21,6 +21,15 @@ public:
 		Assert::IsNull(node.getParent());
 	}
 
+	TEST_METHOD(DestructorTest) {
+		KeyValuePair<string, int> kv("K", 5);
+		BSTNode<KeyValuePair<string, int>>* node = new BSTNode<KeyValuePair<string, int>>(kv);
+		node->add(KeyValuePair<string, int>("H", 26));
+		node->add(KeyValuePair<string, int>("N", 6));
+
+		delete node; //if thre are no memory leaks erros it works right
+	}
+
 	TEST_METHOD(AddLessThanTest) {
 		KeyValuePair<string, int> kv("N", 5);
 		BSTNode<KeyValuePair<string, int>> node(kv);
@@ -121,6 +130,21 @@ public:
 		//check right
 		Assert::AreEqual(copyNode.getRight()->getKey().c_str(), "N");
 		Assert::AreEqual(copyNode.getRight()->getValue(), 6);
+	}
+
+	TEST_METHOD(ClearTest) {
+		KeyValuePair<string, int> kv("K", 5);
+		BSTNode<KeyValuePair<string, int>> node(kv);
+		node.add(KeyValuePair<string, int>("H", 26));
+		node.add(KeyValuePair<string, int>("N", 6));
+
+		node.clear();
+
+		Assert::IsNull(node.getLeft());
+		Assert::IsNull(node.getRight());
+		Assert::IsNull(node.getParent());
+	
+		
 	}
 	};
 }
