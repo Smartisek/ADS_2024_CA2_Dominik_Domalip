@@ -1,93 +1,97 @@
 #pragma once
 #include <iostream>
+#include "KeyValuePair.h"
 
 using namespace std;
 
-template <class K, class V>
+template <class T>
 class BSTNode
 {
 	/*Pointers*/
-	BSTNode<K, V>* parent;
-	BSTNode<K, V>* left;
-	BSTNode<K, V>* right;
+	BSTNode<T>* parent;
+	BSTNode<T>* left;
+	BSTNode<T>* right;
 	/*Data inside node*/
-	K key;
-	V value;
+	T data;
 
 public:
 	/*Constructors*/
 	BSTNode();
-	BSTNode(const BSTNode<K, V>& other); //copy constructor
-	BSTNode<K, V>& operator=(const BSTNode<K, V>& other);
-	BSTNode(K key, V value);
+	BSTNode(const BSTNode<T>& other); //copy constructor
+	BSTNode<T>& operator=(const BSTNode<T>& other);
+	BSTNode(T data);
 	/*Setters*/
-	void setKey(K key);
-	void setValue(V value);
-	void setLeft(BSTNode<K, V>* l);
-	void setRight(BSTNode<K, V>* r);
+	void setItem(T item);
+	void setLeft(BSTNode<T>* l);
+	void setRight(BSTNode<T>* r);
 	/*Getters*/
-	BSTNode<K, V>* getParent();
-	BSTNode<K, V>* getLeft();
-	BSTNode<K, V>* getRight();
-	K& getKey();
-	V& getValue();
+	BSTNode<T>* getParent();
+	BSTNode<T>* getLeft();
+	BSTNode<T>* getRight();
+
+	T& getItem();
 	/*Functions*/ 
 	int count();
-	void add(K key, V value);
+	void add(const T& item);
 	void clear();
 	/*Destructor*/
 	~BSTNode();
+	
+	//getters for key and value
+	auto getKey() const -> decltype(data.getKey()) {
+		return data.getKey();
+	}
 
+	auto getValue() const -> decltype(data.getValue()) {
+		return data.getValue();
+	}
 };
 
-template <class K, class V>
-BSTNode<K, V>::BSTNode(const BSTNode<K, V>& other) //copy constructor making a deeep copy copy with subtrees
+template <class T>
+BSTNode<T>::BSTNode(const BSTNode<T>& other) //copy constructor making a deeep copy copy with subtrees
 {
 	parent = nullptr; //parent is set to null as the new node is not connected to any tree yet
 	left = right = nullptr; //new node starts with null pointers 
 
-	//get the key and value from other node to current node 
-	key = other.key; 
-	value = other.value;
+	//copy the data from the other node to the new node
+	data = other.data; 
 
 	if (other.left != nullptr) { //check if other have left child 
 		//if yes then create a new node copying the left child, this will be done recursively until the are no left chidlren 
-		this->left = new BSTNode<K, V>(*other.left);
+		this->left = new BSTNode<T>(*other.left);
 		this->left->parent = this; //set parent of the new node to be current node 
 	}
 
 	if (other.right != nullptr){ //check if there are any right chidlren 
 		//if yes then create a new node copying the right child, this will be done recursively until there are no right children
-		this->right = new BSTNode<K, V>(*other.right);
+		this->right = new BSTNode<T>(*other.right);
 		this->right->parent = this; //set parent of the new node to be current node
 		}
 }
 
-template <class K, class V>
-BSTNode<K, V>& BSTNode<K, V>::operator=(const BSTNode<K, V>& other)
+template <class T>
+BSTNode<T>& BSTNode<T>::operator=(const BSTNode<T>& other)
 {
 	if (this == &other) //check if the current object is the same as the one trying to be assigned 
 		return *this; //return the current object if it is 
 
 	//delete the current tree to make space for the new one
 	clear();
-
-	//get the key and value from other node to be current node KV
-	this->key = other.key;
-	this->value = other.value;
+	//copy the data from the other node to the new node
+	data = other.data;
 
 	//discard any existing children 
 	left = right = nullptr;
 
 	//if the left side has a child create a new node and copy the left child by copy constructor which will recursively copy the entire left side
 	if (other.left != nullptr) {
-		this->left = new BSTNode<K, V>(*other.left);
+		this->left = new BSTNode<T>(*other.left);
 		this->left->parent = this;
 	}
 		
 	//if the right side has a child create a new node and copy the right child by copy constructor which will recursively copy the entire right side
 	if (other.right != nullptr) {
-		this->right = new BSTNode<K, V>(*other.right);
+		this->right = new BSTNode<T>(*other.right);
 		this->right->parent = this;
 	}
 		
@@ -95,58 +99,52 @@ BSTNode<K, V>& BSTNode<K, V>::operator=(const BSTNode<K, V>& other)
 	return *this; //return the current object
 }
 
-template <class K, class V>
-BSTNode<K, V>::~BSTNode()
+template <class T>
+BSTNode<T>::~BSTNode()
 {
 	
 	clear(); //clear function is called to delete the entire tree
 
 }
 
-template <class K, class V>
-K& BSTNode<K, V>::getKey()
-{
-	return this->key;
+template <class T>
+T& BSTNode<T>::getItem() {
+	return this->data;
 }
 
-template <class K, class V>
-V& BSTNode<K, V>::getValue() {
-	return this->value;
-}
-
-template <class K, class V>
-BSTNode<K, V>* BSTNode<K, V>::getLeft()
+template <class T>
+BSTNode<T>* BSTNode<T>::getLeft()
 {
 	return this->left;
 }
 
-template <class K, class V>
-BSTNode<K, V>* BSTNode<K, V>::getRight()
+template <class T>
+BSTNode<T>* BSTNode<T>::getRight()
 {
 	return this->right;
 }
 
-template <class K, class V>
-BSTNode<K, V>* BSTNode<K, V>::getParent()
+template <class T>
+BSTNode<T>* BSTNode<T>::getParent()
 {
 	return this->parent;
 }
 
-template <class K, class V>
-void BSTNode<K,V>::setLeft(BSTNode<K,V>* l)
+template <class T>
+void BSTNode<T>::setLeft(BSTNode<T>* l)
 {
 	this->left = l;
 }
 
-template <class K, class V>
-void BSTNode<K, V>::setRight(BSTNode<K, V>* r)
+template <class T>
+void BSTNode<T>::setRight(BSTNode<T>* r)
 {
 	this->right = r;
 }
 
 
-template <class K, class V>
-BSTNode<K, V>::BSTNode()
+template <class T>
+BSTNode<T>::BSTNode() //default constructor 
 {
 	parent = nullptr;
 	left = nullptr;
@@ -154,20 +152,19 @@ BSTNode<K, V>::BSTNode()
 }
 
 
-template <class K, class V>
-BSTNode<K, V>::BSTNode(K key, V value) //constructor for creating new node with pass in key and value 
+template <class T>
+BSTNode<T>::BSTNode(T data) //constructor for creating new node with pass in key and value 
 {
 	//left, right and parrent are nullptr as initial state when initiated
 	//they are then set inside the function as add
 	parent = nullptr;
 	left = nullptr;
 	right = nullptr;
-	this->key = key;
-	this->value = value;
+	this->data = data; //set the data to be the data passed in
 }
 
-template <class K, class V>
-int BSTNode<K, V>::count()
+template <class T>
+int BSTNode<T>::count()
 {
 	int c = 1; // 1 for the first node 
 	if (left != nullptr) //base case to stop the recursion
@@ -181,44 +178,44 @@ int BSTNode<K, V>::count()
 	return c;
 }
 
-template <class K, class V>
-void BSTNode<K, V>::add(K key, V value)
+template <class T>
+void BSTNode<T>::add(const T& item)
 {
 	// base case for when the key that we want to add is same as the current node's key, just update the value and return stoppin the recursion
-	if (key == this->key)
+	if (item.getKey() == this->data.getKey())
 	{
-		this->value = value;
+		this->data.setValue(item.getValue());
 		return;
 	}
-	else if (key < this->key) // left side, if the key trying to add is less than the current key go to left side
+	else if (item.getKey() < this->data.getKey()) // left side, if the key trying to add is less than the current key go to left side
 	{
 		if (left == nullptr) 
 		{
 			//when left is null (empty) create a new node and set it's parent to be the current node we are on
-			left = new BSTNode<K, V>(key, value);
+			left = new BSTNode<T>(item);
 			left->parent = this;
 		}
 		else // if it is not null then recursively call add funtion on the left child, this will go until it finds a null node
 		{
-			left->add(key, value);
+			left->add(item);
 		}
 	}
 	else //right subtree check meaing key > this->key
 	{
 		if (right == nullptr) // same logic, if right is empty just create a new node there and set the parent of it to be the current node
 		{
-			right = new BSTNode<K, V>(key, value);
+			right = new BSTNode<T>(item);
 			right->parent = this;
 		}
 		else //if the current right node is occupied then recursively call add on the right child which will go until it finds empty space for new node
 		{
-			right->add(key, value);
+			right->add(item);
 		}
 	}
 }
 
-template<class K, class V>
-void BSTNode<K, V>::clear()
+template<class T>
+void BSTNode<T>::clear()
 {
 	if (left != nullptr) { //if left is not null then recursively call clear on the left child and delete the left child
 		left->clear();
@@ -232,15 +229,10 @@ void BSTNode<K, V>::clear()
 	}
 }
 
-template <class K, class V>
-void BSTNode<K,V>::setKey(K key)
+template <class T>
+void BSTNode<T>::setItem(T item)
 {
-	this->key = key;
+	this->data = item;
 }
 
-template <class K, class V>
-void BSTNode<K, V>::setValue(V value)
-{
-	this->value = value;
-}
 
