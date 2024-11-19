@@ -9,6 +9,9 @@ private:
 	K key;
 	V value;
 public:
+	using key_type = K;
+	using value_type = V;
+
 	//Constructors
 	KeyValuePair() : key(""), value(0) {} //default constructor empty
 	KeyValuePair(K k, V v) : key(k), value(v) {} //constructor with parameters
