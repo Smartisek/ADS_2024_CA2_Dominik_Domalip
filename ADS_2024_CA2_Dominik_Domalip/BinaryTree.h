@@ -21,6 +21,7 @@ public:
 	int count();
 	T& get(T& item);
 	bool containsKey(typename T::key_type key);
+	typename T::value_type& get(typename T::key_type key);
 
 	// Prints 
 	void printInOrder();
@@ -103,6 +104,25 @@ bool BinaryTree<T>::containsKey(typename T::key_type key) {
   }
 	return false; // will return false if we dont find it 
 	
+}
+
+template <class T>
+typename T::value_type& BinaryTree<T>::get(typename T::key_type key) {
+	BSTNode<T>* current = root; //make a pointer to strat at the root 
+
+	while (current != nullptr) { //same as for containsKey we go until we find the key but instead get a value of that key
+		if (current->getKey() == key) {
+			return current->getItem().getValue();
+		}
+		else if (current->getKey() > key) {
+			current = current->getLeft();
+		}
+		else {
+			current = current->getRight();
+		}
+	}
+	throw logic_error("Item was not found!"); //if we dont find the key throw an error
+
 }
 
 template <class T>

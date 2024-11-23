@@ -387,8 +387,58 @@ public:
 		tree.remove(keyRemove);
 		Assert::AreEqual(tree.count(), 6);
 		Assert::IsFalse(tree.containsKey("D"));
+	}
 
+	TEST_METHOD(GetValueContainsKeyTest) {
+		BinaryTree<KeyValuePair<string, int>> tree;
+		KeyValuePair<string, int> Dfour("D", 4);
+		KeyValuePair<string, int> Btwo("B", 2);
+		KeyValuePair<string, int> Fsix("F", 6);
+		KeyValuePair<string, int> Cthree("C", 3);
+		KeyValuePair<string, int> Aone("A", 1);
+		KeyValuePair<string, int> Efive("E", 5);
+		KeyValuePair<string, int> Gseven("G", 7);
 
+		tree.add(Dfour);
+		tree.add(Btwo);
+		tree.add(Fsix);
+		tree.add(Aone);
+		tree.add(Cthree);
+		tree.add(Efive);
+		tree.add(Gseven);
+
+		Assert::AreEqual(tree.count(), 7);
+		Assert::AreEqual(tree.get("D"), 4);
+		Assert::AreEqual(tree.get("B"), 2);
+	}
+
+	TEST_METHOD(GetValueNoKeyTest) {
+		BinaryTree<KeyValuePair<string, int>> tree;
+		KeyValuePair<string, int> Dfour("D", 4);
+		KeyValuePair<string, int> Btwo("B", 2);
+		KeyValuePair<string, int> Fsix("F", 6);
+		KeyValuePair<string, int> Cthree("C", 3);
+		KeyValuePair<string, int> Aone("A", 1);
+		KeyValuePair<string, int> Efive("E", 5);
+		KeyValuePair<string, int> Gseven("G", 7);
+
+		tree.add(Dfour);
+		tree.add(Btwo);
+		tree.add(Fsix);
+		tree.add(Aone);
+		tree.add(Cthree);
+		tree.add(Efive);
+		tree.add(Gseven);
+
+		Assert::AreEqual(tree.count(), 7);
+		
+		try {
+			tree.get("T");
+			Assert::Fail();
+		}
+		catch (const std::exception& e) {
+			Assert::AreEqual("Item was not found!", e.what());
+		}
 	}
 
 	};
