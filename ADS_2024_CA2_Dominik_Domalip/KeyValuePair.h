@@ -18,7 +18,8 @@ public:
 
 	//Getters
 	K getKey() const { return key; }
-	V getValue() const { return value; }
+	V& getValue() { return value; } //returninng by reference which allows for change
+	const V& getValue() const { return value; }
 
 	//Setters
 	void setKey(K k) { key = k; }

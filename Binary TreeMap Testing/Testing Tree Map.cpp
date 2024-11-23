@@ -10,7 +10,7 @@ namespace BinaryTreeMapTesting
 	TEST_CLASS(TreeMapTest) {
 public:
 	TEST_METHOD(ConstructorTest) {
-		BinaryTree<KeyValuePair<string,int>> tree;
+		BinaryTree<KeyValuePair<string, int>> tree;
 		Assert::IsNull(tree.root);
 	}
 
@@ -88,7 +88,7 @@ public:
 		tree.clear();
 		Assert::IsNull(tree.root);
 		Assert::AreEqual(tree.count(), 0);
-		
+
 		//Can be reused? 
 		tree.add(Aone);
 		Assert::IsNotNull(tree.root);
@@ -132,20 +132,20 @@ public:
 		Assert::IsNull(right->getLeft());
 		Assert::AreEqual(right->getRight()->getItem().getKey().c_str(), "G");
 
-    /*  D    Before removing
-	   / \
-	  B   F
-	 / \ / \
-	A  C E  G
+		/*  D    Before removing
+		   / \
+		  B   F
+		 / \ / \
+		A  C E  G
 
-	After removing E
-		D
-	   / \
-	  B   F
-	 / \   \
-	A  C    G
+		After removing E
+			D
+		   / \
+		  B   F
+		 / \   \
+		A  C    G
 
-	*/
+		*/
 	}
 	TEST_METHOD(RemoveKeyNotPresentTest) {
 		BinaryTree<KeyValuePair<string, int>> tree;
@@ -218,22 +218,22 @@ public:
 		Assert::AreEqual(right->getLeft()->getItem().getKey().c_str(), "E");
 		Assert::AreEqual(right->getRight()->getItem().getKey().c_str(), "H");
 
-	/*  D   Before removing
-	   / \
-	  B   F
-	 / \   \
-	A   C   G
-			 \
-			  H
+		/*  D   Before removing
+		   / \
+		  B   F
+		 / \   \
+		A   C   G
+				 \
+				  H
 
 
-		D    After removung
-	   / \
-	  B   F
-	 / \   \
-	A   C   H
+			D    After removung
+		   / \
+		  B   F
+		 / \   \
+		A   C   H
 
-*/
+	*/
 	}
 
 	TEST_METHOD(RemoveNodeWithTwoChildrenTest) {
@@ -261,7 +261,7 @@ public:
 
 		Assert::AreEqual(tree.root->getItem().getKey().c_str(), "D"); //root
 		//after deleting B, C should be promoted as it is bigger than A and smaller than D
-		Assert::AreEqual(tree.root->getLeft()->getItem().getKey().c_str(), "C"); 
+		Assert::AreEqual(tree.root->getLeft()->getItem().getKey().c_str(), "C");
 		Assert::AreEqual(tree.root->getRight()->getItem().getKey().c_str(), "F");
 
 		BSTNode<KeyValuePair<string, int>>* right = tree.root->getRight();
@@ -272,24 +272,24 @@ public:
 		Assert::AreEqual(right->getLeft()->getItem().getKey().c_str(), "E");
 		Assert::AreEqual(right->getRight()->getItem().getKey().c_str(), "G");
 
-	/*  D   Before removing
-	   / \
-	  B   F
-	 / \ / \
-	A  C E  G
+		/*  D   Before removing
+		   / \
+		  B   F
+		 / \ / \
+		A  C E  G
 
 
-		D    After removing B
-	   / \
-	  C   F
-	 /   / \
-	A   E   G
+			D    After removing B
+		   / \
+		  C   F
+		 /   / \
+		A   E   G
 
-	*/
+		*/
 	}
 
 	TEST_METHOD(RemoveNodeWithMultipleChildrenTest) {
-          
+
 		BinaryTree<KeyValuePair<string, int>> tree;
 		KeyValuePair<string, int> Height("H", 8);
 		KeyValuePair<string, int> Dfour("D", 4);
@@ -336,21 +336,21 @@ public:
 		Assert::IsNull(right->getRight()->getLeft());
 
 		/*
-		           H    Before removing 
-			    /     \
+				   H    Before removing
+				/     \
 			   /       \
-			  /         \ 
+			  /         \
 			 D           L
 			/ \        /   \
 		   B   F      J     N
 		  / \ / \    / \   / \
 		 A  C E  G  I   K  M  O                    (Using graphics from inclass lecture code)
-		
-		 
-			       H    Before removing 
-			    /     \
+
+
+				   H    Before removing
+				/     \
 			   /       \
-			  /         \ 
+			  /         \
 			 D           M
 			/ \        /   \
 		   B   F      J     N
@@ -387,9 +387,94 @@ public:
 		tree.remove(keyRemove);
 		Assert::AreEqual(tree.count(), 6);
 		Assert::IsFalse(tree.containsKey("D"));
-
-
 	}
 
-	};
-}
+	TEST_METHOD(GetValueContainsKeyTest) {
+		BinaryTree<KeyValuePair<string, int>> tree;
+		KeyValuePair<string, int> Dfour("D", 4);
+		KeyValuePair<string, int> Btwo("B", 2);
+		KeyValuePair<string, int> Fsix("F", 6);
+		KeyValuePair<string, int> Cthree("C", 3);
+		KeyValuePair<string, int> Aone("A", 1);
+		KeyValuePair<string, int> Efive("E", 5);
+		KeyValuePair<string, int> Gseven("G", 7);
+
+		tree.add(Dfour);
+		tree.add(Btwo);
+		tree.add(Fsix);
+		tree.add(Aone);
+		tree.add(Cthree);
+		tree.add(Efive);
+		tree.add(Gseven);
+
+		Assert::AreEqual(tree.count(), 7);
+		Assert::AreEqual(tree.get("D"), 4);
+		Assert::AreEqual(tree.get("B"), 2);
+	}
+
+	TEST_METHOD(GetValueNoKeyTest) {
+		BinaryTree<KeyValuePair<string, int>> tree;
+		KeyValuePair<string, int> Dfour("D", 4);
+		KeyValuePair<string, int> Btwo("B", 2);
+		KeyValuePair<string, int> Fsix("F", 6);
+		KeyValuePair<string, int> Cthree("C", 3);
+		KeyValuePair<string, int> Aone("A", 1);
+		KeyValuePair<string, int> Efive("E", 5);
+		KeyValuePair<string, int> Gseven("G", 7);
+
+		tree.add(Dfour);
+		tree.add(Btwo);
+		tree.add(Fsix);
+		tree.add(Aone);
+		tree.add(Cthree);
+		tree.add(Efive);
+		tree.add(Gseven);
+
+		Assert::AreEqual(tree.count(), 7);
+
+		try {
+			tree.get("T");
+			Assert::Fail();
+		}
+		catch (const std::exception& e) {
+			Assert::AreEqual("Item was not found!", e.what());
+		}
+	}
+
+	TEST_METHOD(GetSetOfKeysTest) {
+		BinaryTree<KeyValuePair<string, int>> tree;
+		KeyValuePair<string, int> Dfour("D", 4);
+		KeyValuePair<string, int> Btwo("B", 2);
+		KeyValuePair<string, int> Fsix("F", 6);
+		KeyValuePair<string, int> Cthree("C", 3);
+		KeyValuePair<string, int> Aone("A", 1);
+		KeyValuePair<string, int> Efive("E", 5);
+		KeyValuePair<string, int> Gseven("G", 7);
+
+		tree.add(Dfour);
+		tree.add(Btwo);
+		tree.add(Fsix);
+		tree.add(Aone);
+		tree.add(Cthree);
+		tree.add(Efive);
+		tree.add(Gseven);
+
+		Assert::AreEqual(tree.count(), 7);
+
+		set<string> expected = { "A", "B", "C", "D", "E", "F", "G" };
+		set<string> actual = tree.keySet();
+
+		Assert::AreEqual(expected.size(), actual.size());
+
+		//Check the order of keys, should be in order
+		auto it1 = expected.begin();
+		auto it2 = actual.begin();
+
+		while (it1 != expected.end() && it2 != actual.end()) { //go through both sets and compare them if htey are the same 
+			Assert::AreEqual(*it1, *it2);
+			it1++;
+			it2++;
+		}
+	}
+};
+};
