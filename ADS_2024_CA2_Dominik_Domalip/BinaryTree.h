@@ -8,16 +8,21 @@ class BinaryTree
 {
 	void addItemToArray(BSTNode<T>* node, int& pos,pair<typename T::key_type, typename T::value_type>* arr);
 public:
+	// Constructors
 	BSTNode<T>* root;
 	BinaryTree();
 	BinaryTree(const BinaryTree<T>& other);
 	BinaryTree<T> operator=(const BinaryTree<T>& other);
+
+	// Functions
 	void add(T& item);
 	bool remove(T& item);
 	void clear();
 	int count();
 	T& get(T& item);
+	bool containsKey(typename T::key_type key);
 
+	// Prints 
 	void printInOrder();
 	void printInOrder(BSTNode<T>* node);
 	void printPreOrder();
@@ -79,6 +84,25 @@ int BinaryTree<T>::count()
 	if (root == nullptr) //if root is empty return 0
 		return 0;
 	return root->count(); //call count from BSTNode 
+}
+
+template <class T>
+bool BinaryTree<T>::containsKey(typename T::key_type key) {
+	BSTNode<T>* current = root; //pointer for the start of the tree that will traverse through tree untill finds key 
+
+	while (current != nullptr) {
+	if (current->getKey() == key) {
+		return true; //if the root is the key return true
+	}
+	else if (current->getKey() > key) {
+		current = current->getLeft(); //if current pointer is more than what looking for then go search left
+	}
+	else {
+		current = current->getRight(); //if current pointer is less than what looking for then go search right
+	 }
+  }
+	return false; // will return false if we dont find it 
+	
 }
 
 template <class T>
