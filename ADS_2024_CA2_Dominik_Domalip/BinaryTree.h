@@ -20,6 +20,7 @@ public:
 	bool remove(T& item);
 	bool remove(typename T::key_type key);
 	void clear();
+	typename T::value_type& operator[](typename T::key_type key);
 	int count();
 	int size();
 	T& get(T& item);
@@ -306,6 +307,7 @@ T& BinaryTree<T>::get(T& item)
 	throw logic_error("Item was not found!");
 }
 
+
 template <class T>
 void BinaryTree<T>::addItemToArray(BSTNode<T>* node, int& pos, pair<typename T::key_type, typename T::value_type>* arr) //help function for toArray
 {
@@ -339,7 +341,18 @@ void BinaryTree<T>::clear() //public clear function using private helper functio
 	}
 }
 
-
+template <class T>
+typename T::value_type& BinaryTree<T>::operator[](typename T::key_type key) {
+	//first case when the key already exists, in this we can use our functions containsKey to avoid redundancy
+	if (containsKey(key)) { 
+		return get(key); //our get key function alredy returns the value of that key 
+	}
+	else { //second case when key does not exitst 
+		T newItem(key, typename T::value_type()); //create a new item with the key and default value
+		add(newItem); //use our already existing add function
+		return get(key); //return the value of the key
+	}
+}
 
 template <class T>
 BinaryTree<T>::~BinaryTree() //Destructor Function for memory management
@@ -362,7 +375,7 @@ void BinaryTree<T>::printInOrder(BSTNode<T>* node)
 		printInOrder(node->getLeft()); //call the recursive funtion for the left child of current node 
 		cout << node->getItem().getKey() << ": " << node->getItem().getValue() << " "; //print the value of the current node 
 		printInOrder(node->getRight()); // call the recursive funtion for the right child of current node
-	}
+	} 
 	// first visit left subtree, then print the current node and then visit right subtree
 }
 
