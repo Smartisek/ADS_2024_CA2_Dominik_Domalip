@@ -20,6 +20,7 @@ public:
 	bool remove(T& item);
 	void clear();
 	int count();
+	int size();
 	T& get(T& item);
 	bool containsKey(typename T::key_type key);
 	typename T::value_type& get(typename T::key_type key);
@@ -88,6 +89,11 @@ int BinaryTree<T>::count()
 	if (root == nullptr) //if root is empty return 0
 		return 0;
 	return root->count(); //call count from BSTNode 
+}
+
+template <class T>
+int BinaryTree<T>::size() {
+	return count(); //basically call on count funtion otherwise i'd be copying logic from count 
 }
 
 template <class T>

@@ -476,5 +476,26 @@ public:
 			it2++;
 		}
 	}
+
+	TEST_METHOD(SizeOfKeyValueTest) {
+		BinaryTree<KeyValuePair<string, int>> tree;
+		KeyValuePair<string, int> Dfour("D", 4);
+		KeyValuePair<string, int> Btwo("B", 2);
+		KeyValuePair<string, int> Fsix("F", 6);
+		KeyValuePair<string, int> Cthree("C", 3);
+		KeyValuePair<string, int> Aone("A", 1);
+		KeyValuePair<string, int> Efive("E", 5);
+		KeyValuePair<string, int> Gseven("G", 7);
+
+		tree.add(Dfour);
+		tree.add(Btwo);
+		tree.add(Fsix);
+		tree.add(Aone);
+		tree.add(Cthree);
+		tree.add(Efive);
+		tree.add(Gseven);
+
+		Assert::AreEqual(tree.size(), 7);
+	}
 };
 };
