@@ -18,6 +18,7 @@ public:
 	// Functions
 	void add(T& item);
 	bool remove(T& item);
+	bool remove(typename T::key_type key);
 	void clear();
 	int count();
 	int size();
@@ -256,6 +257,32 @@ bool BinaryTree<T>::remove(T& item)
 	delete smallest; //delete the smallest node
 	return true; //return true when node was removed
 
+}
+
+/*For remove by key there is a same logic as remove(T item) above so we can just reuse that functrion to avoid redundancy*/
+template <class T>
+bool BinaryTree<T>::remove(typename T::key_type key) {
+	BSTNode<T>* current = root; //get a pointer that points to the root 
+	T* itemToRemove = nullptr; //item pointer that will need to be removed 
+
+	while (current != nullptr) {
+		if (key == current->getItem().getKey()) {
+			itemToRemove = &current->getItem(); //if key we are looking for is the root or current pointer 
+			//then set pointer itemToRemove to be thast node
+			break; //we found it exit loop
+		}
+		else if (key < current->getItem().getKey()) { //key is less than current node
+			current = current->getLeft(); //recursively go left
+		}
+		else {
+			current = current->getRight(); //key is more than current node, go right
+		}
+	}
+		if (itemToRemove == nullptr) { //if this pointer is still null then we did not find it and retuirn false
+			return false;
+		}
+		//reuse our remove method from above and pass in by reference with our pointer that now poinst to the right key 
+		return remove(*itemToRemove);
 }
 
 template <class T>
