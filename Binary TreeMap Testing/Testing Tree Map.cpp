@@ -497,5 +497,53 @@ public:
 
 		Assert::AreEqual(tree.size(), 7);
 	}
+
+	TEST_METHOD(PutAValueIntoAlreadyExistKey) {
+		BinaryTree<KeyValuePair<string, set<string>>> tree; //create a tree of class KeyValuePair with value being a set of strings 
+		KeyValuePair<string, set<string>> Awords("A", { "Apple" , "Apostole"});
+		KeyValuePair<string, set<string>> Bwords("B", { "Banana", "Bread"});
+
+		tree.add(Awords);
+		tree.add(Bwords);
+
+		Assert::AreEqual(tree.size(), 2);
+		Assert::IsTrue(tree.containsKey("A"));
+		Assert::IsTrue(tree.containsKey("B"));
+		//check if the size of the set is 2
+		//static_cast is used for comparing the 2 to the size_t type which is the return type of the size() function in set
+		Assert::AreEqual(tree.get("A").size(), static_cast<size_t>(2));
+		Assert::AreEqual(tree.get("B").size(), static_cast<size_t>(2));
+#
+		//try to put value 
+		set<string> newAWord = { "Ankle" };
+		tree.put("A", newAWord);
+
+		set<string> newBWord = { "Boil" , "Botanic", "Bee"};
+		tree.put("B", newBWord);
+
+		Assert::AreEqual(tree.get("A").size(), static_cast<size_t>(3));
+		Assert::AreEqual(tree.get("B").size(), static_cast<size_t>(5));
+	}
+
+	TEST_METHOD(PutAValueKeyNotInTreeTest) {
+		BinaryTree<KeyValuePair<string, set<string>>> tree; //create a tree of class KeyValuePair with value being a set of strings 
+		KeyValuePair<string, set<string>> Awords("A", { "Apple" , "Apostole"});
+		KeyValuePair<string, set<string>> Bwords("B", { "Banana", "Bread"});
+
+		tree.add(Awords);
+		tree.add(Bwords);
+
+		Assert::AreEqual(tree.size(), 2);
+		Assert::IsTrue(tree.containsKey("A"));
+		Assert::IsTrue(tree.containsKey("B"));
+
+		//try to put value
+		set<string> newCWord = { "Candy" , "Cane" };
+		tree.put("C", newCWord);
+
+		Assert::AreEqual(tree.size(), 3);
+		Assert::IsTrue(tree.containsKey("C"));
+		Assert::AreEqual(tree.get("C").size(), static_cast<size_t>(2));
+	}
 };
 };

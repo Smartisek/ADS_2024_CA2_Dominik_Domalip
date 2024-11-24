@@ -25,6 +25,8 @@ public:
 	bool containsKey(typename T::key_type key);
 	typename T::value_type& get(typename T::key_type key);
 	set<typename T::key_type> keySet();
+	void put(typename T::key_type key, typename T::value_type& value); //passing in value by reference becausevalue could be big data and we dont want create copy
+	//on the other side the key can be passed by value because it will be a character which is small piece of data 
 	
 
 	// Prints 
@@ -94,6 +96,19 @@ int BinaryTree<T>::count()
 template <class T>
 int BinaryTree<T>::size() {
 	return count(); //basically call on count funtion otherwise i'd be copying logic from count 
+}
+
+template <class T>
+void BinaryTree<T>::put(typename T::key_type key, typename T::value_type& value) { //this method is expecting that the value is a set of values 
+	if (containsKey(key)) { //if we already have this key add the value to the set of values 
+		auto& existingSet = get(key); //get the set of values for the key
+		existingSet.insert(value.begin(), value.end()); //insert the new value into the set	
+	}
+	else {
+// If there is no key in the tree then just use the add method from this tree 
+		T item(key, value);
+		add(item);
+	}
 }
 
 template <class T>
