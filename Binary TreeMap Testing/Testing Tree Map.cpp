@@ -544,6 +544,10 @@ public:
 		Assert::AreEqual(tree.size(), 3);
 		Assert::IsTrue(tree.containsKey("C"));
 		Assert::AreEqual(tree.get("C").size(), static_cast<size_t>(2));
+
+		set<string> moreCwords = { "Cup", "Cupcake" };
+		tree.put("C", moreCwords);	
+		Assert::AreEqual(tree.get("C").size(), static_cast<size_t>(4));
 	}
 };
 };
