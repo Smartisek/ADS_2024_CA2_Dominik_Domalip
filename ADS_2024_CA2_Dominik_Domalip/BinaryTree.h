@@ -18,12 +18,16 @@ public:
 	// Functions
 	void add(T& item);
 	bool remove(T& item);
+	bool remove(typename T::key_type key);
 	void clear();
 	int count();
+	int size();
 	T& get(T& item);
 	bool containsKey(typename T::key_type key);
 	typename T::value_type& get(typename T::key_type key);
 	set<typename T::key_type> keySet();
+	void put(typename T::key_type key, typename T::value_type& value); //passing in value by reference becausevalue could be big data and we dont want create copy
+	//on the other side the key can be passed by value because it will be a character which is small piece of data 
 	
 
 	// Prints 
@@ -88,6 +92,24 @@ int BinaryTree<T>::count()
 	if (root == nullptr) //if root is empty return 0
 		return 0;
 	return root->count(); //call count from BSTNode 
+}
+
+template <class T>
+int BinaryTree<T>::size() {
+	return count(); //basically call on count funtion otherwise i'd be copying logic from count 
+}
+
+template <class T>
+void BinaryTree<T>::put(typename T::key_type key, typename T::value_type& value) { //this method is expecting that the value is a set of values 
+	if (containsKey(key)) { //if we already have this key add the value to the set of values 
+		auto& existingSet = get(key); //get the set of values for the key
+		existingSet.insert(value.begin(), value.end()); //insert the new value into the set	
+	}
+	else {
+// If there is no key in the tree then just use the add method from this tree 
+		T item(key, value);
+		add(item);
+	}
 }
 
 template <class T>
@@ -235,6 +257,32 @@ bool BinaryTree<T>::remove(T& item)
 	delete smallest; //delete the smallest node
 	return true; //return true when node was removed
 
+}
+
+/*For remove by key there is a same logic as remove(T item) above so we can just reuse that functrion to avoid redundancy*/
+template <class T>
+bool BinaryTree<T>::remove(typename T::key_type key) {
+	BSTNode<T>* current = root; //get a pointer that points to the root 
+	T* itemToRemove = nullptr; //item pointer that will need to be removed 
+
+	while (current != nullptr) {
+		if (key == current->getItem().getKey()) {
+			itemToRemove = &current->getItem(); //if key we are looking for is the root or current pointer 
+			//then set pointer itemToRemove to be thast node
+			break; //we found it exit loop
+		}
+		else if (key < current->getItem().getKey()) { //key is less than current node
+			current = current->getLeft(); //recursively go left
+		}
+		else {
+			current = current->getRight(); //key is more than current node, go right
+		}
+	}
+		if (itemToRemove == nullptr) { //if this pointer is still null then we did not find it and retuirn false
+			return false;
+		}
+		//reuse our remove method from above and pass in by reference with our pointer that now poinst to the right key 
+		return remove(*itemToRemove);
 }
 
 template <class T>

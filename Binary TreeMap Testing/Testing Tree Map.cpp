@@ -476,5 +476,235 @@ public:
 			it2++;
 		}
 	}
+
+	TEST_METHOD(SizeOfKeyValueTest) {
+		BinaryTree<KeyValuePair<string, int>> tree;
+		KeyValuePair<string, int> Dfour("D", 4);
+		KeyValuePair<string, int> Btwo("B", 2);
+		KeyValuePair<string, int> Fsix("F", 6);
+		KeyValuePair<string, int> Cthree("C", 3);
+		KeyValuePair<string, int> Aone("A", 1);
+		KeyValuePair<string, int> Efive("E", 5);
+		KeyValuePair<string, int> Gseven("G", 7);
+
+		tree.add(Dfour);
+		tree.add(Btwo);
+		tree.add(Fsix);
+		tree.add(Aone);
+		tree.add(Cthree);
+		tree.add(Efive);
+		tree.add(Gseven);
+
+		Assert::AreEqual(tree.size(), 7);
+	}
+
+	TEST_METHOD(PutAValueIntoAlreadyExistKey) {
+		BinaryTree<KeyValuePair<string, set<string>>> tree; //create a tree of class KeyValuePair with value being a set of strings 
+		KeyValuePair<string, set<string>> Awords("A", { "Apple" , "Apostole"});
+		KeyValuePair<string, set<string>> Bwords("B", { "Banana", "Bread"});
+
+		tree.add(Awords);
+		tree.add(Bwords);
+
+		Assert::AreEqual(tree.size(), 2);
+		Assert::IsTrue(tree.containsKey("A"));
+		Assert::IsTrue(tree.containsKey("B"));
+		//check if the size of the set is 2
+		//static_cast is used for comparing the 2 to the size_t type which is the return type of the size() function in set
+		Assert::AreEqual(tree.get("A").size(), static_cast<size_t>(2));
+		Assert::AreEqual(tree.get("B").size(), static_cast<size_t>(2));
+#
+		//try to put value 
+		set<string> newAWord = { "Ankle" };
+		tree.put("A", newAWord);
+
+		set<string> newBWord = { "Boil" , "Botanic", "Bee"};
+		tree.put("B", newBWord);
+
+		Assert::AreEqual(tree.get("A").size(), static_cast<size_t>(3));
+		Assert::AreEqual(tree.get("B").size(), static_cast<size_t>(5));
+	}
+
+	TEST_METHOD(PutAValueKeyNotInTreeTest) {
+		BinaryTree<KeyValuePair<string, set<string>>> tree; //create a tree of class KeyValuePair with value being a set of strings 
+		KeyValuePair<string, set<string>> Awords("A", { "Apple" , "Apostole"});
+		KeyValuePair<string, set<string>> Bwords("B", { "Banana", "Bread"});
+
+		tree.add(Awords);
+		tree.add(Bwords);
+
+		Assert::AreEqual(tree.size(), 2);
+		Assert::IsTrue(tree.containsKey("A"));
+		Assert::IsTrue(tree.containsKey("B"));
+
+		//try to put value
+		set<string> newCWord = { "Candy" , "Cane" };
+		tree.put("C", newCWord);
+
+		Assert::AreEqual(tree.size(), 3);
+		Assert::IsTrue(tree.containsKey("C"));
+		Assert::AreEqual(tree.get("C").size(), static_cast<size_t>(2));
+
+		set<string> moreCwords = { "Cup", "Cupcake" };
+		tree.put("C", moreCwords);	
+		Assert::AreEqual(tree.get("C").size(), static_cast<size_t>(4));
+	}
+
+	//Testing remove by key so just reusing my previous remove tests 
+	TEST_METHOD(RemoveByKeyLeafNodeTest) {
+		BinaryTree<KeyValuePair<string, int>> tree;
+		KeyValuePair<string, int> Dfour("D", 4);
+		KeyValuePair<string, int> Btwo("B", 2);
+		KeyValuePair<string, int> Fsix("F", 6);
+		KeyValuePair<string, int> Cthree("C", 3);
+		KeyValuePair<string, int> Aone("A", 1);
+		KeyValuePair<string, int> Efive("E", 5);
+		KeyValuePair<string, int> Gseven("G", 7);
+
+		tree.add(Dfour);
+		tree.add(Btwo);
+		tree.add(Fsix);
+		tree.add(Aone);
+		tree.add(Cthree);
+		tree.add(Efive);
+		tree.add(Gseven);
+
+		Assert::AreEqual(tree.count(), 7);
+		
+		tree.remove("E");
+		Assert::AreEqual(tree.count(), 6);
+
+		Assert::AreEqual(tree.root->getItem().getKey().c_str(), "D"); //root
+		Assert::AreEqual(tree.root->getLeft()->getItem().getKey().c_str(), "B"); //left chidl
+		Assert::AreEqual(tree.root->getRight()->getItem().getKey().c_str(), "F"); //right child
+
+		BSTNode<KeyValuePair<string, int>>* right = tree.root->getRight();
+		BSTNode<KeyValuePair<string, int>>* left = tree.root->getLeft();
+
+		Assert::AreEqual(left->getLeft()->getItem().getKey().c_str(), "A");
+		Assert::AreEqual(left->getRight()->getItem().getKey().c_str(), "C");
+
+		Assert::IsNull(right->getLeft());
+		Assert::AreEqual(right->getRight()->getItem().getKey().c_str(), "G");
+	}
+
+	TEST_METHOD(RemoveByKeyOneChildTest) {
+		BinaryTree<KeyValuePair<string, int>> tree;
+		KeyValuePair<string, int> Dfour("D", 4);
+		KeyValuePair<string, int> Btwo("B", 2);
+		KeyValuePair<string, int> Fsix("F", 6);
+		KeyValuePair<string, int> Aone("A", 1);
+		KeyValuePair<string, int> Efive("E", 5);
+		KeyValuePair<string, int> Gseven("G", 7);
+		KeyValuePair<string, int> Height("H", 8);
+
+		tree.add(Dfour);
+		tree.add(Btwo);
+		tree.add(Fsix);
+		tree.add(Aone);
+		tree.add(Efive);
+		tree.add(Gseven);
+		tree.add(Height);
+
+		Assert::AreEqual(tree.count(), 7);
+
+		
+		tree.remove("G");
+		Assert::AreEqual(tree.count(), 6);
+		Assert::IsNotNull(tree.root); //root should not be null
+		Assert::AreEqual(tree.root->getItem().getKey().c_str(), "D"); //get key of root
+		Assert::AreEqual(tree.root->getLeft()->getItem().getKey().c_str(), "B"); //get key of left
+		Assert::AreEqual(tree.root->getRight()->getItem().getKey().c_str(), "F"); //get key of right
+
+		BSTNode<KeyValuePair<string, int>>* right = tree.root->getRight();
+		BSTNode<KeyValuePair<string, int>>* left = tree.root->getLeft();
+
+		Assert::AreEqual(left->getLeft()->getItem().getKey().c_str(), "A");
+		Assert::AreEqual(right->getLeft()->getItem().getKey().c_str(), "E");
+		Assert::AreEqual(right->getRight()->getItem().getKey().c_str(), "H");
+	}
+
+	TEST_METHOD(RemoveByKeyTwoChildrenTest) {
+		BinaryTree<KeyValuePair<string, int>> tree;
+		KeyValuePair<string, int> Dfour("D", 4);
+		KeyValuePair<string, int> Btwo("B", 2);
+		KeyValuePair<string, int> Fsix("F", 6);
+		KeyValuePair<string, int> Cthree("C", 3);
+		KeyValuePair<string, int> Aone("A", 1);
+		KeyValuePair<string, int> Efive("E", 5);
+		KeyValuePair<string, int> Gseven("G", 7);
+
+		tree.add(Dfour);
+		tree.add(Btwo);
+		tree.add(Fsix);
+		tree.add(Aone);
+		tree.add(Cthree);
+		tree.add(Efive);
+		tree.add(Gseven);
+
+		Assert::AreEqual(tree.count(), 7);
+		tree.remove("B");
+		Assert::AreEqual(tree.count(), 6);
+
+		Assert::AreEqual(tree.root->getItem().getKey().c_str(), "D"); //root
+		//after deleting B, C should be promoted as it is bigger than A and smaller than D
+		Assert::AreEqual(tree.root->getLeft()->getItem().getKey().c_str(), "C");
+		Assert::AreEqual(tree.root->getRight()->getItem().getKey().c_str(), "F");
+
+		BSTNode<KeyValuePair<string, int>>* right = tree.root->getRight();
+		BSTNode<KeyValuePair<string, int>>* left = tree.root->getLeft();
+
+		Assert::AreEqual(left->getLeft()->getItem().getKey().c_str(), "A");
+		Assert::IsNull(left->getRight()); //this spot is now empty from C moving up
+		Assert::AreEqual(right->getLeft()->getItem().getKey().c_str(), "E");
+		Assert::AreEqual(right->getRight()->getItem().getKey().c_str(), "G");
+	}
+
+	TEST_METHOD(RemoveByKeyRemoveMultipleChildrenTest) {
+		BinaryTree<KeyValuePair<string, int>> tree;
+		KeyValuePair<string, int> Height("H", 8);
+		KeyValuePair<string, int> Dfour("D", 4);
+		KeyValuePair<string, int> Ltwelve("L", 12);
+		KeyValuePair<string, int> Btwo("B", 2);
+		KeyValuePair<string, int> Fsix("F", 6);
+		KeyValuePair<string, int> Aone("A", 1);
+		KeyValuePair<string, int> Cthree("C", 3);
+		KeyValuePair<string, int> Efive("E", 5);
+		KeyValuePair<string, int> Gseven("G", 7);
+		KeyValuePair<string, int> Jten("J", 10);
+		KeyValuePair<string, int> Nfourteen("N", 14);
+		KeyValuePair<string, int> Inine("I", 9);
+		KeyValuePair<string, int> Keleven("K", 11);
+		KeyValuePair<string, int> Mthirteen("M", 13);
+		KeyValuePair<string, int> Ofifteen("O", 15);
+
+		tree.add(Height);
+		tree.add(Dfour);
+		tree.add(Ltwelve);
+		tree.add(Btwo);
+		tree.add(Fsix);
+		tree.add(Aone);
+		tree.add(Cthree);
+		tree.add(Efive);
+		tree.add(Gseven);
+		tree.add(Jten);
+		tree.add(Nfourteen);
+		tree.add(Inine);
+		tree.add(Keleven);
+		tree.add(Mthirteen);
+		tree.add(Ofifteen);
+
+		Assert::AreEqual(tree.count(), 15);
+
+		BSTNode<KeyValuePair<string, int>>* right = tree.root->getRight();
+		Assert::IsNotNull(right->getRight()->getLeft());
+		Assert::AreEqual(right->getRight()->getLeft()->getItem().getKey().c_str(), "M");
+		
+
+		tree.remove("L");
+		Assert::AreEqual(tree.count(), 14);
+		Assert::AreEqual("M", tree.root->getRight()->getItem().getKey().c_str());
+		Assert::IsNull(right->getRight()->getLeft());
+	}
 };
 };
