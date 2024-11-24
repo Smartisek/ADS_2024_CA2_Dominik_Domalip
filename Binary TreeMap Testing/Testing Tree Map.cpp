@@ -496,6 +496,7 @@ public:
 		tree.add(Gseven);
 
 		Assert::AreEqual(tree.size(), 7);
+		Assert::AreEqual(tree.count(), 7);
 	}
 
 	TEST_METHOD(PutAValueIntoAlreadyExistKey) {
@@ -705,6 +706,46 @@ public:
 		Assert::AreEqual(tree.count(), 14);
 		Assert::AreEqual("M", tree.root->getRight()->getItem().getKey().c_str());
 		Assert::IsNull(right->getRight()->getLeft());
+	}
+
+	TEST_METHOD(GetValueWithOperatorBracketTest) {
+		BinaryTree<KeyValuePair<string, int>> tree;
+		tree["A"] = 6; // Inserts a new node with key "A" and value 1
+
+		Assert::AreEqual(tree.size(), 1); // Gets the value of the node with key "A"
+		Assert::IsTrue(tree.containsKey("A"));
+		Assert::AreEqual(tree["A"], 6);
+
+		tree["B"] = 7; //try with new node
+		Assert::AreEqual(tree.size(), 2);
+		Assert::IsTrue(tree.containsKey("B"));
+		Assert::AreEqual(tree["B"], 7);
+
+		int value = tree["B"]; //store value of B in value
+		Assert::AreEqual(value, 7);
+
+		/*--------------------------------------------------------------*/
+
+		BinaryTree<KeyValuePair<string, set<string>>> tree2; //test with value of sets 
+		KeyValuePair<string, set<string>> Awords("A", { "Apple" , "Apostole" });
+
+		tree2.add(Awords);
+
+		Assert::AreEqual(tree2.size(), 1);
+		Assert::IsTrue(tree2.containsKey("A"));
+		set<string> wordsA = tree2["A"];
+		Assert::AreEqual(wordsA.size(), static_cast<size_t>(2));
+
+		tree2["C"];
+		Assert::AreEqual(tree2.size(), 2);
+		Assert::IsTrue(tree2.containsKey("C"));
+		set<string> wordsC = tree2["C"];
+		Assert::AreEqual(wordsC.size(), static_cast<size_t>(0));
+		tree2["C"].insert("Candy");
+		tree2["C"].insert("Cane");
+		Assert::AreEqual(tree2["C"].size(), static_cast<size_t>(2));
+		Assert::AreEqual(tree2.size(), 2);
+		
 	}
 };
 };
