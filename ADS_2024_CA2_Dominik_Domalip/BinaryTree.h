@@ -347,10 +347,8 @@ typename T::value_type& BinaryTree<T>::operator[](typename T::key_type key) {
 	if (containsKey(key)) { 
 		return get(key); //our get key function alredy returns the value of that key 
 	}
-	else { //second case when key does not exitst 
-		T newItem(key, typename T::value_type()); //create a new item with the key and default value
-		add(newItem); //use our already existing add function
-		return get(key); //return the value of the key
+	else {
+		throw logic_error("Key not found!"); //if key does not exist throw an error
 	}
 }
 
