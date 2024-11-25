@@ -24,10 +24,16 @@
     <ClInclude Include="KeyValuePair.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ReadFromFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="words.txt" />
   </ItemGroup>
 </Project>

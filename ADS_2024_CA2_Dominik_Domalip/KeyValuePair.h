@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <set>
 
 using namespace std;
 
@@ -25,7 +26,7 @@ public:
 	void setKey(K k) { key = k; }
 	void setValue(V v) { value = v; }
 
-	//Overload operators 
+	//Overload operators based on key value 
 	bool operator==(const KeyValuePair& other) const {
 		return key == other.key;
 	}
@@ -37,4 +38,25 @@ public:
 	bool operator>(const KeyValuePair& other) const {
 		return key > other.key;
 	}
+
+	//declaration friend function for printing what is inside this class
+	template <class K, class V>
+	friend ostream& operator<<(ostream& os, const KeyValuePair<K, V>& kv);
 };
+
+template <class K, class V> //implementtaion for friend function 
+ostream& operator<<(ostream& os, const KeyValuePair<K, V>& kv) {
+	os << kv.key << ": " << kv.value;
+	return os;
+}
+
+//overloading operator for set, this will allow to print the set of strings
+template <typename T>
+ostream& operator<<(ostream& os, const set<T>& s) {
+	os << "{ ";
+	for (const auto& element : s) {
+		os << element << ", ";
+	}
+	os << "}";
+	return os;
+}
