@@ -130,9 +130,13 @@
     <ClInclude Include="BinaryTree.h" />
     <ClInclude Include="BSTNode.h" />
     <ClInclude Include="KeyValuePair.h" />
+    <ClInclude Include="ReadFromFile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="words.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
