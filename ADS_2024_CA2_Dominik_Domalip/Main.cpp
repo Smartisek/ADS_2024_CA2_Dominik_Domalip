@@ -17,5 +17,9 @@ int main() {
 
 	tree.printInOrder();
 
+	tree.clear();
+
+	cout << tree.size() << endl;
+
     return 0;
 }

@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "CppUnitTest.h"
+#include <fstream>
+#include "../ADS_2024_CA2_Dominik_Domalip/ReadFromFile.h"
 #include "../ADS_2024_CA2_Dominik_Domalip/BinaryTree.h"
 #include "../ADS_2024_CA2_Dominik_Domalip/KeyValuePair.h"
 
@@ -743,9 +745,6 @@ public:
 		Assert::IsTrue(tree2.containsKey("A"));
 		set<string> wordsA = tree2["A"];
 		Assert::AreEqual(wordsA.size(), static_cast<size_t>(2));
-
-		
-		
 	}
 };
 };
