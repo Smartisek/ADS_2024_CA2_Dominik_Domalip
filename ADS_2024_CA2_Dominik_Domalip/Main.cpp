@@ -11,7 +11,7 @@ int main() {
     BinaryTree<KeyValuePair<char, set<string>>> tree;
 
 	ReadFromFile<char, set<string>> reader(filename);
-	reader.populateTree(tree);
+	reader.populateTreeCharacters(tree);
 
 	cout << tree.size() << endl;
 

@@ -12,7 +12,7 @@ template <typename K, typename V>
 class ReadFromFile {
 public:
 	ReadFromFile(string& filename);
-	void populateTree(BinaryTree<KeyValuePair<K,V>>& tree);
+	void populateTreeCharacters(BinaryTree<KeyValuePair<K,V>>& tree);
 private:
 	string filename;
 };
@@ -33,10 +33,11 @@ string RemoveSpecialCharacters(const string& roughWord) {
 	//in the set we still will have , after the word but that is what we want and is handled in KeyValuePair overload operator for < <
 }
 
+/*For reading text file for Part 2: Characters and all the words asssociated*/
 /*Similar function for reading data from file into the program as the one from my CA from last year: https://github.com/Smartisek/CA_Bugs_life/blob/main/Board.cpp*/
 /*Logic is just read file line by line, split them into words and check if first letter already exist and put new word in the set else just put new entryt*/
 template <typename K, typename V>
-void ReadFromFile<K, V>::populateTree(BinaryTree<KeyValuePair<K, V>>& tree) {
+void ReadFromFile<K, V>::populateTreeCharacters(BinaryTree<KeyValuePair<K, V>>& tree) {
 	ifstream file(filename); //ifstream is used to open the specifed file inside the brackets
 	if (!file.is_open()) { //when file does not open correctly throw an exception
 		throw invalid_argument("File not found");
