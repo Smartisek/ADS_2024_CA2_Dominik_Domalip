@@ -27,6 +27,9 @@
     <ClInclude Include="ReadFromFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CarData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -35,5 +38,8 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="words.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="supercars.csv" />
   </ItemGroup>
 </Project>

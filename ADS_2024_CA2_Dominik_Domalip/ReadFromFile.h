@@ -1,6 +1,7 @@
 #pragma once
 #include "BinaryTree.h"
 #include "KeyValuePair.h"
+#include "CarData.h"
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -13,6 +14,8 @@ class ReadFromFile {
 public:
 	ReadFromFile(string& filename);
 	void populateTreeCharacters(BinaryTree<KeyValuePair<K,V>>& tree);
+	void populateBasedOnStringIndex(BinaryTree<KeyValuePair<K, V>>& tree, string& index);
+	void populateBasedOnIntIndex(BinaryTree<KeyValuePair<K, V>>& tree, string& index);
 private:
 	string filename;
 };
@@ -65,4 +68,130 @@ void ReadFromFile<K, V>::populateTreeCharacters(BinaryTree<KeyValuePair<K, V>>& 
 			
 }
 	file.close(); //when finished just close the file 
+}
+
+
+/*For part 4 I have two functions for populating the tree with data from my supercars.csv (generated with chatgpt)
+The reason for having two functions is because I did not find a way to do it with only one
+I tried with template for K key however I was getting convert errors whenever the index was an int
+Unfortunately I did not find a way to get it working with template but this is still fully functional for part 4 in main*/
+template <typename K, typename V>
+void ReadFromFile<K, V>::populateBasedOnStringIndex(BinaryTree<KeyValuePair<K, V>>& tree, string& index) {
+	ifstream file(filename); //same as above open the file check
+	if (!file.is_open()) { 
+		throw invalid_argument("File not found"); //exception for not found 
+		return; //stop
+	}
+
+	string line;
+	while (getline(file, line)) {
+		stringstream ss(line); //string stream for the line 
+		/*Variables for storing the data based on cardata*/
+		string model, manufacturer, color;
+		int year, horsepower, startingPrice;
+		//temporary store for integers 
+		string yearTemp, horsepowerTemp, startingPriceTemp;
+		//read in words by splitting with ,
+		getline(ss, model, ',');
+		getline(ss, manufacturer, ',');
+		getline(ss, yearTemp, ',');
+		getline(ss, horsepowerTemp, ',');
+		getline(ss, color, ',');
+		getline(ss, startingPriceTemp, ',');
+
+		//convert strings to int with stoi and double  with stod 
+		try {
+			year = stoi(yearTemp);
+			horsepower = stoi(horsepowerTemp);
+			startingPrice = stoi(startingPriceTemp);
+		}
+		catch (const exception& e) {
+			cerr << "Error parsing line: " << line << endl;
+			cerr << "Exception: " << e.what() << endl;
+			continue; // Skip this line and continue with the next
+		}
+		
+
+		CarData car(model, manufacturer, year, horsepower, color, startingPrice); //create the entity 
+
+		//determine the index passed in from user 
+		K key;
+		if (index == "model") {
+			key = car.getModel();
+		}
+		else if (index == "manufacturer") {
+			key = car.getManufacturer();
+		}
+		else if (index == "color") {
+			key = car.getColor();
+		}
+		else {
+			cerr << "Invalid index for string key" << endl;
+			continue; // Skip this line and continue with the next
+		}
+		//make a set with car data and use put function that will handle alredy present key and not present
+		set<CarData> carSet = { car };
+		tree.put(key, carSet);
+	}
+	file.close(); // When finished, close the file 
+}
+
+template <typename K, typename V>
+void ReadFromFile<K, V>::populateBasedOnIntIndex(BinaryTree<KeyValuePair<K, V>>& tree, string& index) {
+	ifstream file(filename); //same as above open the file check
+	if (!file.is_open()) {
+		throw invalid_argument("File not found"); //exception for not found 
+		return; //stop
+	}
+
+	string line;
+	while (getline(file, line)) {
+		stringstream ss(line); //string stream for the line 
+		/*Variables for storing the data based on CarData*/
+		string model, manufacturer, color;
+		int year, horsepower, startingPrice;
+		//temporary store for integers 
+		string yearTemp, horsepowerTemp, startingPriceTemp;
+		//read in words by splitting with ,
+		getline(ss, model, ',');
+		getline(ss, manufacturer, ',');
+		getline(ss, yearTemp, ',');
+		getline(ss, horsepowerTemp, ',');
+		getline(ss, color, ',');
+		getline(ss, startingPriceTemp, ',');
+
+		//convert strings to int with stoi and double  with stod 
+		try {
+			year = stoi(yearTemp);
+			horsepower = stoi(horsepowerTemp);
+			startingPrice = stoi(startingPriceTemp);
+		}
+		catch (const exception& e) {
+			cerr << "Error parsing line: " << line << endl;
+			cerr << "Exception: " << e.what() << endl;
+			continue; // Skip this line and continue with the next
+		}
+
+		CarData car(model, manufacturer, year, horsepower, color, startingPrice); //create the entity 
+
+		//determine the index passed in from user 
+		int key;
+		if (index == "year") {
+			key = car.getYear(); // use int for year
+		}
+		else if (index == "horsepower") {
+			key = car.getHorsepower(); // use int for horsepower
+		}
+		else if (index == "startingPrice") {
+			key = car.getStartingPrice(); // use int for startingPrice
+		}
+		else {
+			cerr << "Invalid index for integer key" << endl;
+			continue; // Skip this line and continue with the next
+		}
+		//make a set with car data and use put function that will handle alredy present key and not present
+		set<CarData> carSet = { car };
+		tree.put(key, carSet);
+	}
+	file.close(); // When finished, close the file 
 }
