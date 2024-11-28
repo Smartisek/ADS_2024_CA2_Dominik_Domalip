@@ -38,6 +38,19 @@ void DisplayIndex(BinaryTree<KeyValuePair<K, V>>& tree) {
 	delete[] array; //delete the array to free memory
 }
 
+template<typename K, typename V>
+void DisplaySubset(BinaryTree<KeyValuePair<K, V>>& tree, K& key) {
+	if (tree.containsKey(key)) { //check if we have key in tree
+		auto value = tree[key]; //using the [] operator that already gets the value of the key 
+		cout << "SUBSET: " << endl;
+		for (auto& item : value) {
+			cout << item << endl;
+		}
+	}
+	else {
+		cout << "NO KEY IN TREE." << endl;
+	}
+}
 
 void PopulateTreeByIntIndex(BinaryTree<KeyValuePair<int, set<CarData>>>& tree, string& index, string& filename) {
 	ReadFromFile<int, set<CarData>> reader(filename);
@@ -65,11 +78,16 @@ int main() {
 		BinaryTree<KeyValuePair<string, set<CarData>>> tree;
 		PopulateTreeByStringIndex(tree, index, filename);
 		DisplayIndex(tree);
+		string key;
+		cin >> key;
+		DisplaySubset(tree, key);
 	}
 	else if (index == "horsepower" || index == "year" || index == "strartingPrice") {
 		BinaryTree<KeyValuePair<int, set<CarData>>> tree;
 		PopulateTreeByIntIndex(tree, index, filename);
 		DisplayIndex(tree);
+		int key = 2020;
+		DisplaySubset(tree, key);
 	}
 	else {
 		cout << "INVALID INDEX" << endl;
