@@ -325,7 +325,8 @@ void BinaryTree<T>::addItemToArray(BSTNode<T>* node, int& pos, pair<typename T::
 template <class T>
 pair<typename T::key_type, typename T::value_type>* BinaryTree<T>::toArray()
 {
-	T* arr = new T[root->count()]; //new array of size of tree
+	//used in main for getting how many rows index has 
+	auto* arr = new pair<typename T::key_type, typename T::value_type>[root->count()]; //new array of size of tree
 	int pos = 0; //start at 0
 	addItemToArray(root, pos, arr); //call function above 
 	return arr;
