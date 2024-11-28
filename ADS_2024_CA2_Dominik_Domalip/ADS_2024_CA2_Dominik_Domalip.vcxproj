@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClInclude Include="BinaryTree.h" />
     <ClInclude Include="BSTNode.h" />
+    <ClInclude Include="CarData.h" />
     <ClInclude Include="KeyValuePair.h" />
     <ClInclude Include="ReadFromFile.h" />
   </ItemGroup>
@@ -137,6 +138,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="words.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="supercars.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
