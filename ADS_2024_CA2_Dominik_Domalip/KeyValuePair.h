@@ -14,8 +14,8 @@ private:
 	K key;
 	V value;
 public:
-	using key_type = K;
-	using value_type = V;
+	using key_type = K; //with using type aliasess we dont need to write template <class K, class V> every time we want to use the type, this will be used in binary tree as well
+	using value_type = V; // https://learn.microsoft.com/en-us/cpp/cpp/aliases-and-typedefs-cpp?view=msvc-170
 
 	//Constructors
 	KeyValuePair() : key(), value() {} //default constructor empty
