@@ -9,20 +9,12 @@
 using namespace std;
 
 /*PART2 Populate tree with Characters by reading a text file and create a set of words releated to that character*/
-void PopulateByCharacters() {
-	string filename = "words.txt";
-	BinaryTree<KeyValuePair<char, set<string>>> tree;
-
-	ReadFromFile<char, set<string>> reader(filename);
+void PopulateByCharacters(BinaryTree<KeyValuePair<char, set<string>>>& tree, string& filename, ReadFromFile<char, set<string>>& reader) {
+	
 	reader.populateTreeCharacters(tree);
 
-	cout << tree.size() << endl;
-
 	tree.printInOrder();
-
-	tree.clear();
-
-	cout << tree.size() << endl;
+	tree.clear(); //manage memory and clear 
 }
 
 /*Function that will print out index and how many each has rows, this is done by using the toArray function from binaryTree which traverses in orrder*/
@@ -34,40 +26,96 @@ void DisplayIndex(BinaryTree<KeyValuePair<K, V>>& tree) {
 	for (int i = 0; i < size; i++) {
 		cout << array[i].first << ": " << array[i].second.size() << " rows" << endl;
 	}
-
-	delete[] array; //delete the array to free memory
+	cout << endl;
+	delete[] array; //delete the array to free memory, not deleting tree yet because will be used for subset
 }
 
 template<typename K, typename V>
 void DisplaySubset(BinaryTree<KeyValuePair<K, V>>& tree, K& key) {
 	if (tree.containsKey(key)) { //check if we have key in tree
 		auto value = tree[key]; //using the [] operator that already gets the value of the key 
-		cout << "SUBSET: " << endl;
-		for (auto& item : value) {
+		cout << "** SUBSET: " << key << " **" << endl;
+		for (auto& item : value) { //go through the set of values
 			cout << item << endl;
 		}
 	}
 	else {
 		cout << "NO KEY IN TREE." << endl;
 	}
+	tree.clear(); //after we display the subset we can get rid of the tree so there are no duplicates or left overs
 }
 
-void PopulateTreeByIntIndex(BinaryTree<KeyValuePair<int, set<CarData>>>& tree, string& index, string& filename) {
-	ReadFromFile<int, set<CarData>> reader(filename);
+void PopulateTreeByIntIndex(BinaryTree<KeyValuePair<int, set<CarData>>>& tree, string& index, string& filename, ReadFromFile<int, set<CarData>>& reader) {
 	reader.populateBasedOnIntIndex(tree, index);
 }
 
-void PopulateTreeByStringIndex(BinaryTree<KeyValuePair<string, set<CarData>>>& tree, string& index, string& filename) {
-	ReadFromFile<string, set<CarData>> reader(filename);
+void PopulateTreeByStringIndex(BinaryTree<KeyValuePair<string, set<CarData>>>& tree, string& index, string& filename, ReadFromFile<string, set<CarData>>& reader) {
 	reader.populateBasedOnStringIndex(tree, index);
 }
 
 int main() {
+	/*File names*/
+	string filenameCSV = "supercars.csv";
+	string filenameTXT = "words.txt";
 
-	string filename = "supercars.csv";
+	/*Reader objects from ReaderFromFile.h used to read data from files, we need one for each type*/
+	ReadFromFile<char, set<string>> wordReader(filenameTXT);
+	ReadFromFile<int, set<CarData>> intReader(filenameCSV);
+	ReadFromFile<string, set<CarData>> stringReader(filenameCSV);
+
+	int input = 0;
 	
+	/*Using Interface with do while loop that I used in my last year project as well : https://github.com/Smartisek/oop-ca3-dominik-domalip/blob/master/src/CA3_Question7.java */
+	do {
+		cout << "---------------------------------------------------" << endl;
+		cout << "CONSOLE COMMANDS" << endl;
+		cout << "1. View All Unique Words From words.txt " << endl;
+		cout << "2. Index supercars.csv and View Data" << endl;
+		cout << "3. EXIT" << endl;
+		cout << "---------------------------------------------------" << endl;
+		cout << "Enter Command: ";
+		cin >> input;
+		if (input == 1) {
+			BinaryTree<KeyValuePair<char, set<string>>> wordTree;
+			PopulateByCharacters(wordTree, filenameTXT, wordReader);
+		}
+		else if (input == 2) {
+			string index;
+			cout << "---------------------------------------------------" << endl;
+			cout << "This database contains information about supercars." << endl;
+			cout << "You can choose to index the database by 'manufacturer', 'year', 'horsepower', 'startingPrice' or 'color'." << endl;
+			cout << "---------------------------------------------------" << endl;
+			cout << "INDEX by: ";
+			cin >> index;
+			if (index == "manufacturer" || index == "color" || index == "model") {	
+				BinaryTree<KeyValuePair<string, set<CarData>>> treeString;
+				PopulateTreeByStringIndex(treeString, index, filenameCSV, stringReader);
+				cout << endl;
+				DisplayIndex(treeString);
+				cout << "---------------------------------------------------" << endl;
+				cout << "Enter key subset you want to view: ";
+				string key;
+				cin >> key;
+				DisplaySubset(treeString, key);
+			}
+			else if (index == "horsepower" || index == "year" || index == "startingPrice") {
+				BinaryTree<KeyValuePair<int, set<CarData>>> treeInt;
+				PopulateTreeByIntIndex(treeInt, index, filenameCSV, intReader);
+				cout << endl;
+				DisplayIndex(treeInt);
+				cout << "---------------------------------------------------" << endl;
+				cout << "Enter key subset you want to view: ";
+				int key;
+				cin >> key;
+				DisplaySubset(treeInt, key);
+			}
+		}
 
-	string index;
+	} while (input != 3);
+
+
+
+	/*string index;
 
 	cout << "This database contains information about supercars." << endl;
 	cout << "You can choose to index the database by 'manufacturer', 'year', 'horsepower', 'startingPrice or 'color'." << endl;
@@ -91,33 +139,7 @@ int main() {
 	}
 	else {
 		cout << "INVALID INDEX" << endl;
-	}
-
-
-
-
-
-
-
-
-
-	//ReadFromFile<int, set<CarData>> reader(filename);
-	//BinaryTree<KeyValuePair<int, set<CarData>>> tree;
-	//string index = "horsepower";
-
-	//reader.populateBasedOnIntIndex(tree, index);
-	//cout << tree.size() << endl;
-	////displayIndex(tree);
-	////tree.printInOrder();
-
-	//ReadFromFile<string, set<CarData>> reader2(filename);
-	//BinaryTree<KeyValuePair<string, set<CarData>>> tree2;
-	//string index2 = "manufacturer";
-
-	//reader2.populateBasedOnStringIndex(tree2, index2);
-	//cout << tree2.size() << endl;
-	//displayIndex(tree2);
-	////tree2.printInOrder();
+	}*/
 
     return 0;
 }
