@@ -7,6 +7,10 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework; 
 
+/*I know I should also test the reading from file method however I did not find a way how to do that because every time my test cannot find the file
+	even when it is specified correctly like "../ADS_2024_CA2_Dominik_Domalip/words.txt" . It works inside my main program so I decided to skip these tests
+	*/
+
 namespace BinaryTreeMapTesting
 {
 	TEST_CLASS(TreeMapTest) {
