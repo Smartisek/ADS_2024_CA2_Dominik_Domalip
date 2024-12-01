@@ -17,7 +17,7 @@ void PopulateByCharacters(BinaryTree<KeyValuePair<char, set<string>>>& tree, str
 	tree.clear(); //manage memory and clear 
 }
 
-/*Function that will print out index and how many each has rows, this is done by using the toArray function from binaryTree which traverses in orrder*/
+/*PART4 Function that will print out index and how many each has rows, this is done by using the toArray function from binaryTree which traverses in orrder*/
 template<typename K, typename V>
 void DisplayIndex(BinaryTree<KeyValuePair<K, V>>& tree) {
 	int size = tree.size(); //get size to stop for loop
@@ -30,6 +30,7 @@ void DisplayIndex(BinaryTree<KeyValuePair<K, V>>& tree) {
 	delete[] array; //delete the array to free memory, not deleting tree yet because will be used for subset
 }
 
+/*PART4 Function that will go through values and display them based on specified index*/
 template<typename K, typename V>
 void DisplaySubset(BinaryTree<KeyValuePair<K, V>>& tree, K& key) {
 	if (tree.containsKey(key)) { //check if we have key in tree
@@ -45,6 +46,8 @@ void DisplaySubset(BinaryTree<KeyValuePair<K, V>>& tree, K& key) {
 	tree.clear(); //after we display the subset we can get rid of the tree so there are no duplicates or left overs
 }
 
+//Simple calling of the function to populate the tree based on the index
+// ---------------------------------
 void PopulateTreeByIntIndex(BinaryTree<KeyValuePair<int, set<CarData>>>& tree, string& index, string& filename, ReadFromFile<int, set<CarData>>& reader) {
 	reader.populateBasedOnIntIndex(tree, index);
 }
@@ -52,6 +55,8 @@ void PopulateTreeByIntIndex(BinaryTree<KeyValuePair<int, set<CarData>>>& tree, s
 void PopulateTreeByStringIndex(BinaryTree<KeyValuePair<string, set<CarData>>>& tree, string& index, string& filename, ReadFromFile<string, set<CarData>>& reader) {
 	reader.populateBasedOnStringIndex(tree, index);
 }
+// ---------------------------------
+
 
 int main() {
 	/*File names*/
@@ -112,34 +117,6 @@ int main() {
 		}
 
 	} while (input != 3);
-
-
-
-	/*string index;
-
-	cout << "This database contains information about supercars." << endl;
-	cout << "You can choose to index the database by 'manufacturer', 'year', 'horsepower', 'startingPrice or 'color'." << endl;
-	cout << "INDEX by: ";
-	cin >> index;
-
-	if (index == "manufacturer" || index == "color" || index == "model") {
-		BinaryTree<KeyValuePair<string, set<CarData>>> tree;
-		PopulateTreeByStringIndex(tree, index, filename);
-		DisplayIndex(tree);
-		string key;
-		cin >> key;
-		DisplaySubset(tree, key);
-	}
-	else if (index == "horsepower" || index == "year" || index == "strartingPrice") {
-		BinaryTree<KeyValuePair<int, set<CarData>>> tree;
-		PopulateTreeByIntIndex(tree, index, filename);
-		DisplayIndex(tree);
-		int key = 2020;
-		DisplaySubset(tree, key);
-	}
-	else {
-		cout << "INVALID INDEX" << endl;
-	}*/
 
     return 0;
 }

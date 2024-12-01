@@ -4,6 +4,10 @@
 #include <set>
 using namespace std;
 
+/*Binary Tree Map implemented in "BinaryTree.h", I did not realize I should create a separated TreeMap class and I went on with making BinaryTree to work with my program
+I started a bit early so I was little too far when I found out
+*/
+
 template <class T>
 class BinaryTree
 {
