@@ -8,6 +8,20 @@
 
 using namespace std;
 
+class PopulateTreeByIntIndexFunctor {
+public:
+	void operator()(BinaryTree<KeyValuePair<int, set<CarData>>>& tree, string& index, string& filename, ReadFromFile<int, set<CarData>>& reader) {
+		reader.populateBasedOnIntIndex(tree, index);
+	}
+};
+
+class PopulateTreeByStringIndexFunctor {
+public:
+	void operator()(BinaryTree<KeyValuePair<string, set<CarData>>>& tree, string& index, string& filename, ReadFromFile<string, set<CarData>>& reader) {
+		reader.populateBasedOnStringIndex(tree, index);
+	}
+};
+
 /*PART2 Populate tree with Characters by reading a text file and create a set of words releated to that character*/
 void PopulateByCharacters(BinaryTree<KeyValuePair<char, set<string>>>& tree, string& filename, ReadFromFile<char, set<string>>& reader) {
 	
@@ -46,17 +60,6 @@ void DisplaySubset(BinaryTree<KeyValuePair<K, V>>& tree, K& key) {
 	tree.clear(); //after we display the subset we can get rid of the tree so there are no duplicates or left overs
 }
 
-//Simple calling of the function to populate the tree based on the index
-// ---------------------------------
-void PopulateTreeByIntIndex(BinaryTree<KeyValuePair<int, set<CarData>>>& tree, string& index, string& filename, ReadFromFile<int, set<CarData>>& reader) {
-	reader.populateBasedOnIntIndex(tree, index);
-}
-
-void PopulateTreeByStringIndex(BinaryTree<KeyValuePair<string, set<CarData>>>& tree, string& index, string& filename, ReadFromFile<string, set<CarData>>& reader) {
-	reader.populateBasedOnStringIndex(tree, index);
-}
-// ---------------------------------
-
 
 int main() {
 	/*File names*/
@@ -94,7 +97,8 @@ int main() {
 			cin >> index;
 			if (index == "manufacturer" || index == "color" || index == "model") {	
 				BinaryTree<KeyValuePair<string, set<CarData>>> treeString;
-				PopulateTreeByStringIndex(treeString, index, filenameCSV, stringReader);
+				PopulateTreeByStringIndexFunctor populateTreeByStringIndex; //creating functor instance to populate tree
+				populateTreeByStringIndex(treeString, index, filenameCSV, stringReader); //using functor to populate tree
 				cout << endl;
 				DisplayIndex(treeString);
 				cout << "---------------------------------------------------" << endl;
@@ -105,7 +109,8 @@ int main() {
 			}
 			else if (index == "horsepower" || index == "year" || index == "startingPrice") {
 				BinaryTree<KeyValuePair<int, set<CarData>>> treeInt;
-				PopulateTreeByIntIndex(treeInt, index, filenameCSV, intReader);
+				PopulateTreeByIntIndexFunctor populateTreeByIntIndex; //create functor
+				populateTreeByIntIndex(treeInt, index, filenameCSV, intReader); //use functor
 				cout << endl;
 				DisplayIndex(treeInt);
 				cout << "---------------------------------------------------" << endl;

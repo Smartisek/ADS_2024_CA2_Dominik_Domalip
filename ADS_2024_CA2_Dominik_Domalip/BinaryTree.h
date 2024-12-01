@@ -376,7 +376,7 @@ void BinaryTree<T>::printInOrder(BSTNode<T>* node)
 	
 	if (node != nullptr) { // base case for the recursive function
 		printInOrder(node->getLeft()); //call the recursive funtion for the left child of current node 
-		cout << node->getItem() << " "; //print the value of the current node 
+		cout << node->getItem() << " " << endl; //print the value of the current node 
 		printInOrder(node->getRight()); // call the recursive funtion for the right child of current node
 	} 
 	// first visit left subtree, then print the current node and then visit right subtree

@@ -44,7 +44,7 @@ bool CarData::operator<(const CarData& other) const {
 ostream& operator<<(ostream& os, const CarData& data) {
     os << "Model: " << data.model << ", Manufacturer: " << data.manufacturer
         << ", Year: " << data.year << ", Horsepower: " << data.horsepower
-        << ", Color: " << data.color << ", Starting Price: " << data.startingPrice;
+        << ", Color: " << data.color << ", Starting Price: " << " $" << data.startingPrice;
     return os;
 }
 
