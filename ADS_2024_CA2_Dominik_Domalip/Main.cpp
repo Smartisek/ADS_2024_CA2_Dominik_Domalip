@@ -7,7 +7,7 @@
 #include "CarData.h"
 
 using namespace std;
-
+/*Functors for populating the tree https://www.programiz.com/cpp-programming/functors */
 class PopulateTreeByIntIndexFunctor {
 public:
 	void operator()(BinaryTree<KeyValuePair<int, set<CarData>>>& tree, string& index, string& filename, ReadFromFile<int, set<CarData>>& reader) {
@@ -58,6 +58,7 @@ void DisplaySubset(BinaryTree<KeyValuePair<K, V>>& tree, K& key) {
 		cout << "NO KEY IN TREE." << endl;
 	}
 	tree.clear(); //after we display the subset we can get rid of the tree so there are no duplicates or left overs
+	//if we still needed to manipulate the tree i would not clear but since after viewing we do not need anymore we can manage memory here 
 }
 
 
